@@ -66,6 +66,7 @@ my-antd-app/
 
     ```bash
     npm install
+    npm install ant-design-vue@4.x --save
     npm install --save @ant-design/icons-vue
     # 或者使用 yarn
     # yarn install
