@@ -66,6 +66,7 @@ my-antd-app/
 
     ```bash
     npm install
+    npm install --save @ant-design/icons-vue
     # 或者使用 yarn
     # yarn install
     ```
@@ -79,14 +80,6 @@ my-antd-app/
     ```
 
     專案將會在 `http://localhost:5173` (或 Vite 提示的其他端口) 啟動。
-
-4.  **構建生產版本**:
-
-    ```bash
-    npm run build
-    # 或者使用 yarn
-    # yarn build
-    ```
 
     構建後的靜態文件將會輸出到 `dist` 目錄中。
 
