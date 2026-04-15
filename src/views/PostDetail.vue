@@ -1,55 +1,65 @@
 <template>
   <div class="post-detail" v-if="post">
+    <!-- 麵包屑導航 -->
+    <a-breadcrumb style="margin-bottom: 16px">
+      <a-breadcrumb-item><router-link to="/"><home-outlined /> 首頁</router-link></a-breadcrumb-item>
+      <a-breadcrumb-item><router-link to="/posts">文章列表</router-link></a-breadcrumb-item>
+      <a-breadcrumb-item>{{ post.title }}</a-breadcrumb-item>
+    </a-breadcrumb>
+
     <a-page-header
-      style="border: 1px solid rgb(235, 237, 240); margin-bottom: 24px; padding: 16px"
+      style="border: 1px solid rgb(235, 237, 240); margin-bottom: 24px; padding: 16px; border-radius: 8px; background: #fff"
       :title="post.title"
-      :sub-title="post.date"
       @back="() => $router.go(-1)"
     >
       <template #backIcon>
         <arrow-left-outlined style="font-size: 1.2rem" />
       </template>
       <template #extra>
-        <a-space>
-          <a-tag v-for="tag in post.tags" :key="tag" color="blue">
-            <template #icon>
-              <code-outlined />
-            </template>
-            {{ tag }}
-          </a-tag>
-          <a-button type="primary" @click="copyLink">
-            <link-outlined style="margin-right: 4px" />
-            分享
-          </a-button>
-        </a-space>
+        <a-button type="primary" @click="copyLink" shape="round">
+          <link-outlined style="margin-right: 4px" />
+          分享文章
+        </a-button>
       </template>
+      
+      <a-descriptions size="small" :column="3">
+        <a-descriptions-item label="作者">
+          <a-tag color="blue"><user-outlined /> {{ post.author }}</a-tag>
+        </a-descriptions-item>
+        <a-descriptions-item label="發佈日期">
+          <calendar-outlined /> {{ post.date }}
+        </a-descriptions-item>
+        <a-descriptions-item label="閱讀時間">
+          <clock-circle-outlined /> {{ post.readTime }}
+        </a-descriptions-item>
+        <a-descriptions-item label="分類">
+          <a-tag color="orange">{{ post.category }}</a-tag>
+        </a-descriptions-item>
+        <a-descriptions-item label="標籤" :span="2">
+          <a-space wrap>
+            <a-tag v-for="tag in post.tags" :key="tag" color="cyan">
+              <template #icon><code-outlined /></template>
+              {{ tag }}
+            </a-tag>
+          </a-space>
+        </a-descriptions-item>
+      </a-descriptions>
     </a-page-header>
 
-    <a-card style="margin-bottom: 24px">
-      <a-space direction="vertical" style="width: 100%">
-        <a-space>
-          <calendar-outlined style="color: #1890ff; font-size: 1.1rem" />
-          <span>發佈於 {{ post.date }}</span>
-        </a-space>
-        <a-space>
-          <user-outlined style="color: #52c41a; font-size: 1.1rem" />
-          <span>作者：{{ post.author }}</span>
-        </a-space>
-        <a-space>
-          <file-text-outlined style="color: #722ed1; font-size: 1.1rem" />
-          <span>標籤：</span>
-          <a-tag v-for="tag in post.tags" :key="tag" color="cyan">{{ tag }}</a-tag>
-        </a-space>
-      </a-space>
-    </a-card>
+    <!-- 文章封面圖 -->
+    <div class="post-cover-container">
+      <img :src="post.cover" alt="cover" class="post-cover" />
+    </div>
 
-    <a-card title="文章內容" :bordered="true" style="margin-bottom: 24px">
-      <template #extra>
-        <read-outlined style="margin-right: 8px; color: #eb2f96" />
-      </template>
+    <a-card :bordered="false" class="content-card">
       <div class="content">
         <a-typography>
           <a-typography-paragraph>
+            <div class="post-summary-box">
+              <strong>摘要：</strong>{{ post.summary }}
+            </div>
+          </a-typography-paragraph>
+          <a-typography-paragraph class="main-content">
             {{ post.content }}
           </a-typography-paragraph>
         </a-typography>
@@ -58,14 +68,16 @@
 
     <a-divider>
       <heart-outlined style="color: #ff4d4f; margin: 0 8px" />
+      感謝閱讀
+      <heart-outlined style="color: #ff4d4f; margin: 0 8px" />
     </a-divider>
 
-    <a-space style="width: 100%; justify-content: center; margin-top: 24px">
-      <a-button @click="$router.push('/posts')">
+    <a-space style="width: 100%; justify-content: center; margin-top: 24px; margin-bottom: 40px">
+      <a-button size="large" @click="$router.push('/posts')" shape="round">
         <arrow-left-outlined style="margin-right: 4px" />
         返回文章列表
       </a-button>
-      <a-button type="primary" @click="$router.push('/')">
+      <a-button type="primary" size="large" @click="$router.push('/')" shape="round">
         <home-outlined style="margin-right: 4px" />
         返回首頁
       </a-button>
@@ -92,12 +104,12 @@ import {
   CalendarOutlined, 
   UserOutlined,
   FileTextOutlined,
-  ReadOutlined,
   HeartOutlined,
   ArrowLeftOutlined,
   HomeOutlined,
   LinkOutlined,
-  CodeOutlined
+  CodeOutlined,
+  ClockCircleOutlined
 } from '@ant-design/icons-vue';
 
 const route = useRoute();
@@ -118,12 +130,51 @@ const copyLink = () => {
 
 <style scoped>
 .post-detail {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
-.content {
-  line-height: 1.8;
-  font-size: 1.1rem;
+
+.post-cover-container {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.post-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 20px;
+}
+
+.post-summary-box {
+  background: #f9f9f9;
+  padding: 16px;
+  border-left: 4px solid #1890ff;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  font-style: italic;
+  color: #666;
+}
+
+.main-content {
+  line-height: 2;
+  font-size: 1.15rem;
   white-space: pre-wrap;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .post-cover-container {
+    height: 250px;
+  }
 }
 </style>
