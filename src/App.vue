@@ -2,7 +2,7 @@
   <a-layout class="layout">
     <a-layout-header>
       <div class="logo">
-        <blog-outlined style="margin-right: 8px; font-size: 1.5rem" />
+        <book-outlined style="margin-right: 8px; font-size: 1.5rem" />
         我的個人部落格
       </div>
       <a-menu
@@ -51,7 +51,7 @@ import {
   HomeOutlined, 
   FileTextOutlined, 
   UserOutlined, 
-  BlogOutlined,
+  BookOutlined,
   HeartOutlined 
 } from '@ant-design/icons-vue';
 
