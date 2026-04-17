@@ -8,21 +8,13 @@
         :theme="isDarkMode ? 'dark' : 'light'"
         width="220"
       >
-        <div class="logo">
-          <book-outlined style="font-size: 1.5rem" />
-          <span
-            v-if="!collapsed"
-            class="logo-text"
-            >管理系統</span
-          >
-        </div>
-
         <a-menu
           v-model:selectedKeys="selectedKeys"
           v-model:openKeys="openKeys"
           :theme="isDarkMode ? 'dark' : 'light'"
           mode="inline"
         >
+          <div class="logo"></div>
           <a-sub-menu key="sub1">
             <template #icon><folder-outlined /></template>
             <template #title>個人部落格</template>
@@ -68,15 +60,15 @@
             <menu-unfold-outlined v-if="collapsed" />
             <menu-fold-outlined v-else />
           </div>
-
+          <div class="logo">
+            <book-outlined style="font-size: 1.5rem" />
+            <span class="logo-text"> 管理系統 </span>
+          </div>
           <div class="user-info">
             <a-space size="middle">
-              <a-badge
-                dot
-                color="green"
-              >
-                <bell-outlined style="font-size: 18px; cursor: pointer" />
-              </a-badge>
+              <bell-outlined
+                style="font-size: 20px; vertical-align: middle; cursor: pointer"
+              />
               <a-dropdown>
                 <span
                   class="user-dropdown-link"
@@ -129,7 +121,63 @@
         </a-layout-content>
 
         <a-layout-footer class="app-footer">
-          Personal Management System ©2026 Created by Manus
+          <div class="footer-container">
+            <a-row :gutter="[32, 24]">
+              <a-col
+                :xs="24"
+                :sm="12"
+                :md="8"
+              >
+                <div class="footer-brand">
+                  <h3 class="footer-logo">TMS</h3>
+                  <p class="footer-desc">
+                    專業技術人才管理系統，致力於優化人力資源配置與技術落點分析。
+                  </p>
+                </div>
+              </a-col>
+
+              <a-col
+                :xs="12"
+                :sm="6"
+                :md="8"
+              >
+                <h4 class="footer-title">幫助與支援</h4>
+                <ul class="footer-links">
+                  <li><a href="#">操作手冊</a></li>
+                  <li><a href="#">常見問題</a></li>
+                  <li><a href="#">技術回報</a></li>
+                </ul>
+              </a-col>
+
+              <a-col
+                :xs="12"
+                :sm="6"
+                :md="8"
+              >
+                <h4 class="footer-title">聯繫我們</h4>
+                <div class="footer-contact">
+                  <p>Email: support@manus.tech</p>
+                  <div class="footer-social">
+                    <a-space size="middle">
+                      <github-outlined class="social-icon" />
+                      <global-outlined class="social-icon" />
+                      <mail-outlined class="social-icon" />
+                    </a-space>
+                  </div>
+                </div>
+              </a-col>
+            </a-row>
+
+            <a-divider class="footer-divider" />
+
+            <div class="footer-bottom">
+              <div class="copyright">
+                Personal Management System ©2026 Created by
+                <strong>Manus</strong>
+              </div>
+              <div class="version-tag">Version 2.4.0-stable</div>
+            </div>
+          </div>
         </a-layout-footer>
       </a-layout>
 
