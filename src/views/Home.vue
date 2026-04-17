@@ -1,5 +1,27 @@
 <template>
   <div class="home">
+    <a-alert
+      message="站點小提醒"
+      description="你可以從精選內容、快速導覽與訂閱抽屜開始探索，部分操作也會有即時回饋提示。"
+      type="info"
+      show-icon
+      closable
+      style="margin-bottom: 20px"
+    />
+
+    <div class="home-toolbar">
+      <a-space wrap>
+        <a-button type="primary" shape="round" @click="openDrawer">
+          <notification-outlined style="margin-right: 6px" />
+          開啟快速面板
+        </a-button>
+        <a-button shape="round" @click="showWelcome">
+          <smile-outlined style="margin-right: 6px" />
+          互動提示
+        </a-button>
+      </a-space>
+    </div>
+
     <!-- 輪播圖 -->
     <a-carousel autoplay class="home-carousel">
       <div v-for="post in featuredPosts" :key="post.id" class="carousel-item">
@@ -24,30 +46,44 @@
       </a-typography-paragraph>
     </a-typography>
 
-    <!-- 統計資訊 -->
-    <a-row :gutter="16" style="margin: 24px 0">
-      <a-col :span="8">
-        <a-card>
-          <a-statistic title="文章總數" :value="posts.length" :value-style="{ color: '#3f51b5' }">
-            <template #prefix><file-text-outlined /></template>
-          </a-statistic>
-        </a-card>
-      </a-col>
-      <a-col :span="8">
-        <a-card>
-          <a-statistic title="技術文章" :value="techCount" :value-style="{ color: '#4caf50' }">
-            <template #prefix><code-outlined /></template>
-          </a-statistic>
-        </a-card>
-      </a-col>
-      <a-col :span="8">
-        <a-card>
-          <a-statistic title="累計標籤" :value="tagCount" :value-style="{ color: '#ff9800' }">
-            <template #prefix><tags-outlined /></template>
-          </a-statistic>
-        </a-card>
-      </a-col>
-    </a-row>
+    <a-tabs v-model:activeKey="activeTab" style="margin-top: 24px">
+      <a-tab-pane key="overview" tab="站點總覽">
+        <!-- 統計資訊 -->
+        <a-row :gutter="16" style="margin: 24px 0">
+          <a-col :span="8">
+            <a-card>
+              <a-statistic title="文章總數" :value="posts.length" :value-style="{ color: '#3f51b5' }">
+                <template #prefix><file-text-outlined /></template>
+              </a-statistic>
+            </a-card>
+          </a-col>
+          <a-col :span="8">
+            <a-card>
+              <a-statistic title="技術文章" :value="techCount" :value-style="{ color: '#4caf50' }">
+                <template #prefix><code-outlined /></template>
+              </a-statistic>
+            </a-card>
+          </a-col>
+          <a-col :span="8">
+            <a-card>
+              <a-statistic title="累計標籤" :value="tagCount" :value-style="{ color: '#ff9800' }">
+                <template #prefix><tags-outlined /></template>
+              </a-statistic>
+            </a-card>
+          </a-col>
+        </a-row>
+      </a-tab-pane>
+      <a-tab-pane key="highlights" tab="快速導覽">
+        <a-list :data-source="quickActions" bordered>
+          <template #renderItem="{ item }">
+            <a-list-item>
+              <a-list-item-meta :title="item.title" :description="item.description" />
+              <a-button type="link" @click="item.action">前往</a-button>
+            </a-list-item>
+          </template>
+        </a-list>
+      </a-tab-pane>
+    </a-tabs>
 
     <a-divider>
       <star-outlined style="margin: 0 8px; color: #faad14" />
@@ -105,14 +141,46 @@
         查看所有文章
       </a-button>
     </div>
+
+    <a-drawer
+      v-model:open="drawerOpen"
+      title="快速互動面板"
+      placement="right"
+      width="380"
+    >
+      <a-alert
+        message="訂閱更新"
+        description="留下你的 Email 後，我們會以互動提示模擬通知流程。"
+        type="success"
+        show-icon
+        style="margin-bottom: 16px"
+      />
+      <a-form layout="vertical" @finish="submitSubscription">
+        <a-form-item
+          label="Email"
+          name="email"
+          :rules="[
+            { required: true, message: '請輸入 Email' },
+            { type: 'email', message: 'Email 格式不正確' }
+          ]"
+        >
+          <a-input v-model:value="subscriptionEmail" placeholder="you@example.com" />
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary" html-type="submit" block>送出訂閱</a-button>
+        </a-form-item>
+      </a-form>
+    </a-drawer>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { message, notification } from 'ant-design-vue';
 import { posts } from '../data/posts';
-import { 
-  CalendarOutlined, 
+import {
+  CalendarOutlined,
   FileTextOutlined,
   SmileOutlined,
   RocketOutlined,
@@ -121,32 +189,74 @@ import {
   CodeOutlined,
   TagsOutlined,
   TagOutlined,
-  ClockCircleOutlined
+  ClockCircleOutlined,
+  NotificationOutlined,
 } from '@ant-design/icons-vue';
 
-const featuredPosts = computed(() => {
-  return posts.slice(0, 3);
-});
+const router = useRouter();
+const drawerOpen = ref(false);
+const activeTab = ref('overview');
+const subscriptionEmail = ref('');
 
-const latestPosts = computed(() => {
-  return [...posts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
-});
-
-const techCount = computed(() => {
-  return posts.filter(p => p.category === '技術').length;
-});
-
+const featuredPosts = computed(() => posts.slice(0, 3));
+const latestPosts = computed(() => [...posts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3));
+const techCount = computed(() => posts.filter(p => p.category === '技術').length);
 const tagCount = computed(() => {
   const tags = new Set();
   posts.forEach(p => p.tags.forEach(t => tags.add(t)));
   return tags.size;
 });
+
+const quickActions = computed(() => [
+  {
+    title: '瀏覽所有文章',
+    description: '快速進入文章列表查看所有內容。',
+    action: () => router.push('/posts'),
+  },
+  {
+    title: '查看關於我',
+    description: '前往 About 頁面看更多個人資訊與聯絡方式。',
+    action: () => router.push('/about'),
+  },
+  {
+    title: '閱讀最新文章',
+    description: `直接打開最新文章：${latestPosts.value[0]?.title ?? '尚無資料'}`,
+    action: () => {
+      if (latestPosts.value[0]) {
+        router.push(`/posts/${latestPosts.value[0].id}`);
+      }
+    },
+  },
+]);
+
+const openDrawer = () => {
+  drawerOpen.value = true;
+};
+
+const showWelcome = () => {
+  notification.info({
+    message: '探索提示',
+    description: '你可以切換 Tabs、打開 Drawer，或直接前往文章頁體驗更多互動元件。',
+  });
+};
+
+const submitSubscription = () => {
+  drawerOpen.value = false;
+  message.success(`已收到 ${subscriptionEmail.value} 的訂閱申請`);
+  subscriptionEmail.value = '';
+};
 </script>
 
 <style scoped>
 .home {
   max-width: 900px;
   margin: 0 auto;
+}
+
+.home-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
 }
 
 .home-carousel {

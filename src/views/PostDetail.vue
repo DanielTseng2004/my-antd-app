@@ -7,6 +7,14 @@
       <a-breadcrumb-item>{{ post.title }}</a-breadcrumb-item>
     </a-breadcrumb>
 
+    <a-alert
+      message="文章互動功能"
+      description="你可以分享文章、切換內容分頁，或留下閱讀回饋。"
+      type="info"
+      show-icon
+      style="margin-bottom: 16px"
+    />
+
     <a-page-header
       style="border: 1px solid rgb(235, 237, 240); margin-bottom: 24px; padding: 16px; border-radius: 8px; background: #fff"
       :title="post.title"
@@ -16,12 +24,18 @@
         <arrow-left-outlined style="font-size: 1.2rem" />
       </template>
       <template #extra>
-        <a-button type="primary" @click="copyLink" shape="round">
-          <link-outlined style="margin-right: 4px" />
-          分享文章
-        </a-button>
+        <a-space wrap>
+          <a-button @click="drawerOpen = true" shape="round">
+            <message-outlined style="margin-right: 4px" />
+            閱讀回饋
+          </a-button>
+          <a-button type="primary" @click="copyLink" shape="round">
+            <link-outlined style="margin-right: 4px" />
+            分享文章
+          </a-button>
+        </a-space>
       </template>
-      
+
       <a-descriptions size="small" :column="3">
         <a-descriptions-item label="作者">
           <a-tag color="blue"><user-outlined /> {{ post.author }}</a-tag>
@@ -52,18 +66,36 @@
     </div>
 
     <a-card :bordered="false" class="content-card">
-      <div class="content">
-        <a-typography>
-          <a-typography-paragraph>
-            <div class="post-summary-box">
-              <strong>摘要：</strong>{{ post.summary }}
-            </div>
-          </a-typography-paragraph>
-          <a-typography-paragraph class="main-content">
-            {{ post.content }}
-          </a-typography-paragraph>
-        </a-typography>
-      </div>
+      <a-tabs v-model:activeKey="activeTab">
+        <a-tab-pane key="content" tab="文章內容">
+          <div class="content">
+            <a-typography>
+              <a-typography-paragraph>
+                <div class="post-summary-box">
+                  <strong>摘要：</strong>{{ post.summary }}
+                </div>
+              </a-typography-paragraph>
+              <a-typography-paragraph class="main-content">
+                {{ post.content }}
+              </a-typography-paragraph>
+            </a-typography>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="notes" tab="閱讀筆記">
+          <a-alert
+            message="閱讀建議"
+            description="如果這篇文章有幫助，可以用右上角分享，或在回饋抽屜中留下你的想法。"
+            type="success"
+            show-icon
+            style="margin-bottom: 16px"
+          />
+          <a-list :data-source="readingNotes" bordered>
+            <template #renderItem="{ item }">
+              <a-list-item>{{ item }}</a-list-item>
+            </template>
+          </a-list>
+        </a-tab-pane>
+      </a-tabs>
     </a-card>
 
     <a-divider>
@@ -82,6 +114,42 @@
         返回首頁
       </a-button>
     </a-space>
+
+    <a-drawer
+      v-model:open="drawerOpen"
+      title="留下閱讀回饋"
+      placement="right"
+      width="380"
+    >
+      <a-form layout="vertical" @finish="submitFeedback">
+        <a-form-item
+          label="你的稱呼"
+          name="name"
+          :rules="[{ required: true, message: '請輸入稱呼' }]"
+        >
+          <a-input v-model:value="feedbackForm.name" placeholder="例如：讀者 A" />
+        </a-form-item>
+        <a-form-item
+          label="這篇文章對你有幫助嗎？"
+          name="rating"
+          :rules="[{ required: true, message: '請選擇評價' }]"
+        >
+          <a-radio-group v-model:value="feedbackForm.rating">
+            <a-radio value="很有幫助">很有幫助</a-radio>
+            <a-radio value="還不錯">還不錯</a-radio>
+            <a-radio value="想看更多案例">想看更多案例</a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item
+          label="回饋內容"
+          name="comment"
+          :rules="[{ required: true, message: '請輸入回饋內容' }]"
+        >
+          <a-textarea v-model:value="feedbackForm.comment" :rows="4" placeholder="告訴我你喜歡哪個段落，或希望補充什麼內容。" />
+        </a-form-item>
+        <a-button type="primary" html-type="submit" block>送出回饋</a-button>
+      </a-form>
+    </a-drawer>
   </div>
   <div v-else>
     <a-result status="404" title="404" sub-title="抱歉，找不到這篇文章。">
@@ -96,12 +164,12 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { posts } from '../data/posts';
 import { message } from 'ant-design-vue';
-import { 
-  CalendarOutlined, 
+import {
+  CalendarOutlined,
   UserOutlined,
   FileTextOutlined,
   HeartOutlined,
@@ -109,13 +177,31 @@ import {
   HomeOutlined,
   LinkOutlined,
   CodeOutlined,
-  ClockCircleOutlined
+  ClockCircleOutlined,
+  MessageOutlined,
 } from '@ant-design/icons-vue';
 
 const route = useRoute();
+const drawerOpen = ref(false);
+const activeTab = ref('content');
+const feedbackForm = reactive({
+  name: '',
+  rating: '',
+  comment: '',
+});
+
 const post = computed(() => {
   const id = parseInt(route.params.id);
   return posts.find(p => p.id === id);
+});
+
+const readingNotes = computed(() => {
+  if (!post.value) return [];
+  return [
+    `這篇文章分類為「${post.value.category}」，適合快速理解主題核心。`,
+    `建議先看摘要，再閱讀正文，可更快抓到重點。`,
+    `文中標籤包含 ${post.value.tags.join('、')}，方便延伸閱讀。`,
+  ];
 });
 
 const copyLink = () => {
@@ -125,6 +211,14 @@ const copyLink = () => {
   }).catch(() => {
     message.error('複製失敗，請重試');
   });
+};
+
+const submitFeedback = () => {
+  drawerOpen.value = false;
+  message.success(`感謝 ${feedbackForm.name} 的回饋`);
+  feedbackForm.name = '';
+  feedbackForm.rating = '';
+  feedbackForm.comment = '';
 };
 </script>
 
