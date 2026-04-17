@@ -1,106 +1,97 @@
-# 我的個人部落格
+# My Ant Design Vue Practice
 
-## 專案簡介
+這是一個以 `Vue 3`、`Vite`、`Vue Router` 與 `Ant Design Vue` 建立的練習專案。  
+目前內容不是單一部落格頁，而是結合了個人部落格展示與後台管理介面的多頁面 demo，適合拿來練習：
 
-這是一個基於 Vue 3、Vite 和 Ant Design Vue 構建的個人部落格專案。旨在提供一個簡潔、美觀且響應式的平台，用於分享技術文章、開發日誌和個人心得。專案整合了 Vue Router 進行頁面導航，並利用 Ant Design Vue 提供了豐富的 UI 元件，確保了良好的用戶體驗和開發效率。
+- `Ant Design Vue` 元件整合
+- `Vue Router` 多頁路由切換
+- 表單、表格、抽屜、分頁、統計卡片等常見後台 UI
+- 使用本地 mock data 模擬資料查詢與 CRUD 流程
 
-## 功能特點
+## 專案特色
 
-*   **響應式佈局**：適應不同尺寸的設備，提供一致的瀏覽體驗。
-*   **文章列表**：顯示所有部落格文章，支援關鍵字搜尋和分頁功能。
-*   **文章詳情**：展示單篇文章的完整內容，包含標題、日期、作者和標籤。
-*   **關於我頁面**：介紹作者信息、技術棧和聯繫方式，並展示統計數據。
-*   **導航菜單**：清晰的頂部導航欄，方便用戶快速切換頁面。
-*   **Ant Design Vue**：採用企業級 UI 設計語言，提供高品質的視覺效果和交互體驗。
-*   **Vue Router**：實現前端路由，提供流暢的單頁應用體驗。
+- 左側 `Sider` 選單 + 上方 `Header` 的管理系統版型
+- 部落格首頁輪播、最新文章、快速導覽與訂閱互動
+- 文章列表的搜尋、分類、熱門標籤與分頁展示
+- 文章詳情頁路由切換
+- About 頁的個人介紹、技能進度、聯絡表單與合作資訊
+- 技術人才查詢頁，包含：
+  - 多條件搜尋
+  - 連動下拉選單
+  - 表格分頁
+  - 新增 / 編輯 / 刪除資料
+- 統計儀表板頁，顯示人才分布與技術熱點
+- 系統設定頁，包含個人資料、偏好設定與安全日誌
 
 ## 技術棧
 
-*   **Vue 3**: 漸進式 JavaScript 框架，用於構建用戶界面。
-*   **Vite**: 下一代前端開發與構建工具，提供極速的開發體驗。
-*   **Ant Design Vue**: Ant Design 官方提供的 Vue UI 庫，豐富的元件庫和設計規範。
-*   **Vue Router**: Vue.js 官方路由管理器，用於構建單頁應用。
-*   **JavaScript / TypeScript**: 專案主要開發語言。
-*   **CSS**: 用於樣式設計，包含響應式佈局。
+- `Vue 3`
+- `Vite`
+- `Vue Router`
+- `Ant Design Vue`
+- `@ant-design/icons-vue`
+- `dayjs`
 
-## 目錄結構
+## 目前頁面
 
-```
+| 路由 | 說明 |
+| --- | --- |
+| `/` | 首頁看板，含輪播、文章統計、快速導覽與訂閱抽屜 |
+| `/posts` | 文章列表，支援搜尋、分類、標籤篩選與分頁 |
+| `/posts/:id` | 文章詳情頁 |
+| `/about` | 關於作者、技能、聯絡合作資訊 |
+| `/form` | 技術人才查詢與 CRUD 管理頁 |
+| `/staticdashboard` | 統計數據儀表板 |
+| `/systemsettings` | 系統設定頁 |
+
+## 專案結構
+
+```text
 my-antd-app/
-├── public/
-├── src/
-│   ├── assets/             # 靜態資源，如圖片
-│   ├── components/         # 可重用元件
-│   ├── data/               # 模擬數據，如 posts.js
-│   ├── layouts/            # 佈局元件 (目前整合在 App.vue)
-│   ├── router/             # Vue Router 配置
-│   │   └── index.js
-│   ├── views/              # 頁面級元件
-│   │   ├── About.vue
-│   │   ├── Home.vue
-│   │   ├── PostDetail.vue
-│   │   └── Posts.vue
-│   ├── App.vue             # 應用主元件，包含導航和路由視圖
-│   ├── main.js             # 應用入口文件
-│   └── style.css           # 全局樣式文件
-├── .gitignore
-├── index.html
-├── package.json
-├── package-lock.json
-├── README.md
-└── vite.config.js
+├─ public/
+├─ src/
+│  ├─ assets/              # 圖片與靜態資源
+│  ├─ components/          # 共用元件
+│  ├─ data/                # 文章資料與 mock data
+│  ├─ router/              # 路由設定
+│  ├─ views/               # 各頁面元件
+│  ├─ App.vue              # 主版型與側邊選單
+│  ├─ main.js              # 應用入口
+│  └─ style.css            # 全域樣式
+├─ index.html
+├─ package.json
+└─ README.md
 ```
 
-## 安裝與運行
+## 安裝與啟動
 
-請確保您的系統已安裝 Node.js 和 npm (或 yarn)。
+請先確認本機已安裝 `Node.js`。
 
-1.  **克隆專案** (如果尚未克隆):
+```bash
+npm install
+npm run dev
+```
 
-    ```bash
-    git clone <您的專案倉庫地址>
-    cd my-antd-app
-    ```
+開發伺服器預設會在 `http://localhost:5173` 啟動。
 
-2.  **安裝依賴**:
+## 可用指令
 
-    ```bash
-    npm install
-    npm install ant-design-vue@4.x --save
-    npm install --save @ant-design/icons-vue
-    # 或者使用 yarn
-    # yarn install
-    ```
+```bash
+npm run dev      # 啟動開發環境
+npm run build    # 建置正式版本
+npm run preview  # 預覽建置結果
+```
 
-3.  **啟動開發伺服器**:
+## 資料來源說明
 
-    ```bash
-    npm run dev
-    # 或者使用 yarn
-    # yarn dev
-    ```
+- 部落格文章資料位於 `src/data/posts.js`
+- 後台人才資料與組織結構 mock data 位於 `src/data/mockData.js`
+- 目前所有新增、編輯、刪除與統計皆為前端本地模擬，尚未串接後端 API
 
-    專案將會在 `http://localhost:5173` (或 Vite 提示的其他端口) 啟動。
+## 後續可擴充方向
 
-    構建後的靜態文件將會輸出到 `dist` 目錄中。
-
-## 未來改進
-
-*   後端 API 整合，實現真實的文章管理。
-*   用戶認證與授權。
-*   評論功能。
-*   文章分類與標籤雲。
-*   更豐富的富文本編輯器。
-
-## 貢獻
-
-歡迎任何形式的貢獻！如果您有任何建議或發現 Bug，請隨時提交 Issue 或 Pull Request。
-
-## 許可證
-
-該專案採用 MIT 許可證。詳情請參閱 `LICENSE` 文件 (如果存在)。
-
----
-
-**作者**: Manus AI
-**日期**: 2026年4月15日
+- 將文章與人才資料改為串接真實 API
+- 補上登入驗證與權限控管
+- 將表單頁拆分成可重用元件
+- 為路由與資料操作加入單元測試
+- 調整路由命名與網址結構，例如將 `/staticdashboard` 改為更一致的 `/statistics-dashboard`

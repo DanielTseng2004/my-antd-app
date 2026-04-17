@@ -153,12 +153,13 @@
           <template v-else-if="column.key === 'action'">
             <a-space>
               <a @click="handleEdit(record)"><edit-outlined />編輯</a>
-              <a-popconfirm
-                title="確定要刪除此筆資料嗎？"
-                @confirm="handleDelete(record.id)"
+              <a-divider type="vertical" />
+              <a
+                style="color: #ff4d4f"
+                @click="confirmDelete(record)"
               >
-                <a style="color: #ff4d4f"><delete-outlined />刪除</a>
-              </a-popconfirm>
+                <delete-outlined />刪除
+              </a>
             </a-space>
           </template>
         </template>
@@ -293,7 +294,7 @@
 
 <script setup>
 import { reactive, ref, computed, onMounted, nextTick } from "vue";
-import { message } from "ant-design-vue";
+import { Modal, message } from "ant-design-vue";
 import {
   PlusOutlined,
   SearchOutlined,
@@ -459,6 +460,21 @@ const handleDelete = (id) => {
   allRawData.value = allRawData.value.filter((item) => item.id !== id);
   message.success("資料已刪除");
   fetchData();
+};
+const confirmDelete = (record) => {
+  Modal.confirm({
+    title: "確定要刪除資料嗎？",
+    // 在 content 顯示具體姓名，使用者體驗更好
+    content: `您確定要永久刪除「${record.name}」的技術人才資料嗎？此操作不可撤銷。`,
+    okText: "確認刪除",
+    okType: "danger",
+    cancelText: "取消",
+    onOk() {
+      // 這裡直接執行你原本的功能
+      handleDelete(record.id);
+    },
+    // onCancel 留空即可，點擊取消會自動關閉視窗
+  });
 };
 
 const handleModalOk = () => {

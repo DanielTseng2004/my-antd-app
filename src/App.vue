@@ -52,11 +52,11 @@
             <template #icon><pie-chart-outlined /></template>
             <router-link to="/staticdashboard">統計數據</router-link>
           </a-menu-item>
-          <a-menu-item key="SystemSettings">
-            <template #icon><setting-outlined /></template>
-            <router-link to="/systemsettings">系統設定</router-link>
-          </a-menu-item>
         </a-sub-menu>
+        <a-menu-item key="SystemSettings">
+          <template #icon><setting-outlined /></template>
+          <router-link to="/systemsettings">系統設定</router-link>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
 
@@ -104,11 +104,20 @@
               <template #overlay>
                 <a-menu>
                   <a-menu-item key="0"><user-outlined /> 個人資料</a-menu-item>
-                  <a-menu-item key="1"
-                    ><setting-outlined /> 系統設定</a-menu-item
-                  >
+                  <a-menu-item key="1">
+                    <setting-outlined />
+                    <router-link to="/systemsettings"> 系統設定 </router-link>
+                  </a-menu-item>
                   <a-menu-divider />
-                  <a-menu-item key="3"><logout-outlined /> 登出</a-menu-item>
+                  <a-menu-item key="3">
+                    <a-menu-item
+                      key="3"
+                      @click="showLogoutConfirm"
+                    >
+                      <logout-outlined />
+                      登出
+                    </a-menu-item>
+                  </a-menu-item>
                 </a-menu>
               </template>
             </a-dropdown>
@@ -144,6 +153,7 @@
 <script setup>
 import { ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
+import { Modal, message } from "ant-design-vue";
 import {
   HomeOutlined,
   FileTextOutlined,
@@ -165,7 +175,27 @@ const route = useRoute();
 const collapsed = ref(false);
 const selectedKeys = ref(["Home"]);
 const openKeys = ref(["sub1"]); // 預設展開第一個資料夾
+const showLogoutConfirm = () => {
+  Modal.confirm({
+    title: "確認登出",
+    content: "您確定要登出個人管理系統嗎？",
+    okText: "確認登出",
+    cancelText: "我再想想",
+    okType: "danger", // 讓按鈕變成紅色，更有警告感
+    onOk() {
+      // 這裡不寫 router.push，改用模擬提示
+      const hide = message.loading("正在登出系統...", 0);
 
+      setTimeout(() => {
+        hide(); // 關閉 Loading
+        message.success("模擬登出成功！（僅供 UI 展示）");
+      }, 1500);
+    },
+    onCancel() {
+      console.log("使用者取消登出");
+    },
+  });
+};
 watchEffect(() => {
   if (route.name) {
     selectedKeys.value = [route.name];
