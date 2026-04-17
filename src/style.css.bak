@@ -196,7 +196,7 @@ code {
 }
 
 #app :deep(.ant-layout-header) {
-  background: var(--header-bg);
+  background: #001529;
   padding: 0 50px;
   display: flex;
   align-items: center;
@@ -218,7 +218,7 @@ code {
 
 #app :deep(.ant-list-item) {
   padding: 16px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #f0f0f0;
 }
 
 #app :deep(.ant-list-item:last-child) {
@@ -423,4 +423,3 @@ code {
     border-right-color: var(--border);
   }
 }
-

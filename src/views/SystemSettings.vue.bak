@@ -1,11 +1,5 @@
 <template>
-  <div
-    :style="{
-      padding: '24px',
-      background: isDarkMode ? 'var(--surface-bg)' : '#fff',
-      borderRadius: '8px',
-    }"
-  >
+  <div style="padding: 24px; background: #fff; border-radius: 8px">
     <a-tabs v-model:activeKey="activeKey">
       <a-tab-pane
         key="1"

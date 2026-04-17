@@ -30,12 +30,12 @@
           <a-avatar
             src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaWF5ZXEzNGpjZDdxb25pZjk1MWN5cmdyam85bXF0a3IxejQ3d2YybyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/n8jVKVYoma3fepT5Ii/giphy.gif"
             size="large"
-            style="
-              background-color: #87d068;
-              width: 64px;
-              height: 64px;
-              line-height: 64px;
-            "
+            :style="{
+              backgroundColor: avatarBackground,
+              width: '64px',
+              height: '64px',
+              lineHeight: '64px',
+            }"
           >
           </a-avatar>
         </template>
@@ -376,8 +376,11 @@ import {
   HomeOutlined,
   HistoryOutlined,
 } from "@ant-design/icons-vue";
-import { reactive, ref } from "vue";
+import { reactive, ref, computed } from "vue";
 import { message } from "ant-design-vue";
+import { useTheme } from "../composables/useTheme";
+
+const { isDarkMode } = useTheme();
 
 const skills = [
   { name: "Vue 3 (Composition API)", percent: 95, color: "#42b883" },
@@ -395,6 +398,10 @@ const contactForm = reactive({
   email: "",
   message: "",
 });
+
+const avatarBackground = computed(() =>
+  isDarkMode.value ? "#52c41a" : "#87d068",
+);
 
 const collaborationItems = [
   {

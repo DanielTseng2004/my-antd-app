@@ -7,7 +7,7 @@
             title="總人才數"
             :value="allRawData.length"
             suffix="人"
-            :value-style="{ color: '#3f51b5' }"
+            :value-style="{ color: statisticColors.total }"
           />
         </a-card>
       </a-col>
@@ -17,7 +17,7 @@
             title="Vue 開發者"
             :value="vueCount"
             suffix="人"
-            :value-style="{ color: '#42b983' }"
+            :value-style="{ color: statisticColors.vue }"
           />
         </a-card>
       </a-col>
@@ -82,7 +82,8 @@
                 <a-badge
                   :count="index + 1"
                   :number-style="{
-                    backgroundColor: index < 3 ? '#f5222d' : '#bfbfbf',
+                    backgroundColor:
+                      index < 3 ? badgeColors.top3 : badgeColors.others,
                   }"
                 />
                 <span style="margin-left: 16px; flex: 1">{{ item.name }}</span>
@@ -99,7 +100,9 @@
 <script setup>
 import { computed } from "vue";
 import { generateMockList } from "../data/mockData"; // 引用你的模擬數據
+import { useTheme } from "../composables/useTheme";
 
+const { isDarkMode } = useTheme();
 const allRawData = generateMockList(100);
 
 // 統計邏輯
@@ -112,6 +115,16 @@ const seniorPercent = computed(
       allRawData.length) *
     100,
 );
+
+const statisticColors = computed(() => ({
+  total: isDarkMode.value ? "#60a5fa" : "#3f51b5",
+  vue: isDarkMode.value ? "#10b981" : "#42b983",
+}));
+
+const badgeColors = computed(() => ({
+  top3: isDarkMode.value ? "#ef4444" : "#f5222d",
+  others: isDarkMode.value ? "#6b7280" : "#bfbfbf",
+}));
 
 const divisionStats = computed(() => {
   return allRawData.reduce((acc, cur) => {

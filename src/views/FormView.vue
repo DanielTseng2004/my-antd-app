@@ -1,5 +1,11 @@
 <template>
-  <div style="padding: 24px; background: #f0f2f5; min-height: 100vh">
+  <div
+    :style="{
+      padding: '24px',
+      background: pageBackground,
+      'min-height': '100vh',
+    }"
+  >
     <a-card
       :bordered="false"
       style="margin-bottom: 16px"
@@ -155,7 +161,7 @@
               <a @click="handleEdit(record)"><edit-outlined />編輯</a>
               <a-divider type="vertical" />
               <a
-                style="color: #ff4d4f"
+                :style="{ color: deleteLinkColor }"
                 @click="confirmDelete(record)"
               >
                 <delete-outlined />刪除
@@ -304,6 +310,9 @@ import {
 } from "@ant-design/icons-vue";
 
 import { hierarchy, techOptions, generateMockList } from "../data/mockData";
+import { useTheme } from "../composables/useTheme";
+
+const { isDarkMode } = useTheme();
 
 // --- 1. 定義表格欄位 ---
 const columns = [
@@ -377,6 +386,14 @@ const modalSecs = computed(() =>
   formState.division && formState.department
     ? hierarchy[formState.division][formState.department]
     : [],
+);
+
+// 主題相關顏色
+const deleteLinkColor = computed(() =>
+  isDarkMode.value ? "#ff7875" : "#ff4d4f",
+);
+const pageBackground = computed(() =>
+  isDarkMode.value ? "var(--app-bg)" : "#f0f2f5",
 );
 
 // --- 4. 核心功能函數 ---

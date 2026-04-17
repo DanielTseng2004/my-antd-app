@@ -11,18 +11,11 @@
 
     <div class="home-toolbar">
       <a-space wrap>
-        <a-button
-          type="primary"
-          shape="round"
-          @click="openDrawer"
-        >
+        <a-button type="primary" shape="round" @click="openDrawer">
           <notification-outlined style="margin-right: 6px" />
           開啟快速面板
         </a-button>
-        <a-button
-          shape="round"
-          @click="showWelcome"
-        >
+        <a-button shape="round" @click="showWelcome">
           <smile-outlined style="margin-right: 6px" />
           互動提示
         </a-button>
@@ -30,33 +23,13 @@
     </div>
 
     <!-- 輪播圖 -->
-    <a-carousel
-      autoplay
-      class="home-carousel"
-    >
-      <div
-        v-for="post in featuredPosts"
-        :key="post.id"
-        class="carousel-item"
-      >
-        <div
-          class="carousel-content"
-          :style="{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${post.cover})`,
-          }"
-        >
+    <a-carousel autoplay class="home-carousel">
+      <div v-for="post in featuredPosts" :key="post.id" class="carousel-item">
+        <div class="carousel-content" :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${post.cover})` }">
           <div class="carousel-text">
-            <a-typography-title
-              :level="2"
-              style="color: white"
-              >{{ post.title }}</a-typography-title
-            >
+            <a-typography-title :level="2" style="color: white">{{ post.title }}</a-typography-title>
             <p>{{ post.summary }}</p>
-            <a-button
-              type="primary"
-              @click="$router.push('/posts/' + post.id)"
-              >閱讀更多</a-button
-            >
+            <a-button type="primary" @click="$router.push('/posts/' + post.id)">閱讀更多</a-button>
           </div>
         </div>
       </div>
@@ -73,72 +46,39 @@
       </a-typography-paragraph>
     </a-typography>
 
-    <a-tabs
-      v-model:activeKey="activeTab"
-      style="margin-top: 24px"
-    >
-      <a-tab-pane
-        key="overview"
-        tab="站點總覽"
-      >
-        <a-row
-          :gutter="16"
-          style="margin: 24px 0"
-        >
+    <a-tabs v-model:activeKey="activeTab" style="margin-top: 24px">
+      <a-tab-pane key="overview" tab="站點總覽">
+        <!-- 統計資訊 -->
+        <a-row :gutter="16" style="margin: 24px 0">
           <a-col :span="8">
             <a-card>
-              <a-statistic
-                title="文章總數"
-                :value="posts.length"
-                :value-style="{ color: statisticColors.total }"
-              >
+              <a-statistic title="文章總數" :value="posts.length" :value-style="{ color: '#3f51b5' }">
                 <template #prefix><file-text-outlined /></template>
               </a-statistic>
             </a-card>
           </a-col>
           <a-col :span="8">
             <a-card>
-              <a-statistic
-                title="技術文章"
-                :value="techCount"
-                :value-style="{ color: statisticColors.tech }"
-              >
+              <a-statistic title="技術文章" :value="techCount" :value-style="{ color: '#4caf50' }">
                 <template #prefix><code-outlined /></template>
               </a-statistic>
             </a-card>
           </a-col>
           <a-col :span="8">
             <a-card>
-              <a-statistic
-                title="累計標籤"
-                :value="tagCount"
-                :value-style="{ color: statisticColors.tags }"
-              >
+              <a-statistic title="累計標籤" :value="tagCount" :value-style="{ color: '#ff9800' }">
                 <template #prefix><tags-outlined /></template>
               </a-statistic>
             </a-card>
           </a-col>
         </a-row>
       </a-tab-pane>
-      <a-tab-pane
-        key="highlights"
-        tab="快速導覽"
-      >
-        <a-list
-          :data-source="quickActions"
-          bordered
-        >
+      <a-tab-pane key="highlights" tab="快速導覽">
+        <a-list :data-source="quickActions" bordered>
           <template #renderItem="{ item }">
             <a-list-item>
-              <a-list-item-meta
-                :title="item.title"
-                :description="item.description"
-              />
-              <a-button
-                type="link"
-                @click="item.action"
-                >前往</a-button
-              >
+              <a-list-item-meta :title="item.title" :description="item.description" />
+              <a-button type="link" @click="item.action">前往</a-button>
             </a-list-item>
           </template>
         </a-list>
@@ -168,9 +108,7 @@
               {{ item.category }}
             </span>
             <span>
-              <clock-circle-outlined
-                style="margin-right: 8px; color: #eb2f96"
-              />
+              <clock-circle-outlined style="margin-right: 8px; color: #eb2f96" />
               {{ item.readTime }}
             </span>
           </template>
@@ -184,19 +122,11 @@
           </template>
           <a-list-item-meta :description="item.summary">
             <template #title>
-              <router-link
-                :to="'/posts/' + item.id"
-                style="font-size: 1.2rem; font-weight: bold"
-              >
+              <router-link :to="'/posts/' + item.id" style="font-size: 1.2rem; font-weight: bold">
                 {{ item.title }}
               </router-link>
               <div style="margin-top: 8px">
-                <a-tag
-                  v-for="tag in item.tags"
-                  :key="tag"
-                  color="blue"
-                  >{{ tag }}</a-tag
-                >
+                <a-tag v-for="tag in item.tags" :key="tag" color="blue">{{ tag }}</a-tag>
               </div>
             </template>
           </a-list-item-meta>
@@ -206,12 +136,7 @@
     </a-list>
 
     <div style="text-align: center; margin-top: 40px; margin-bottom: 40px">
-      <a-button
-        type="primary"
-        size="large"
-        @click="$router.push('/posts')"
-        shape="round"
-      >
+      <a-button type="primary" size="large" @click="$router.push('/posts')" shape="round">
         <arrow-right-outlined style="margin-right: 8px" />
         查看所有文章
       </a-button>
@@ -230,30 +155,19 @@
         show-icon
         style="margin-bottom: 16px"
       />
-      <a-form
-        layout="vertical"
-        @finish="submitSubscription"
-      >
+      <a-form layout="vertical" @finish="submitSubscription">
         <a-form-item
           label="Email"
           name="email"
           :rules="[
             { required: true, message: '請輸入 Email' },
-            { type: 'email', message: 'Email 格式不正確' },
+            { type: 'email', message: 'Email 格式不正確' }
           ]"
         >
-          <a-input
-            v-model:value="subscriptionEmail"
-            placeholder="you@example.com"
-          />
+          <a-input v-model:value="subscriptionEmail" placeholder="you@example.com" />
         </a-form-item>
         <a-form-item>
-          <a-button
-            type="primary"
-            html-type="submit"
-            block
-            >送出訂閱</a-button
-          >
+          <a-button type="primary" html-type="submit" block>送出訂閱</a-button>
         </a-form-item>
       </a-form>
     </a-drawer>
@@ -261,11 +175,10 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
-import { message, notification } from "ant-design-vue";
-import { posts } from "../data/posts";
-import { useTheme } from "../composables/useTheme";
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { message, notification } from 'ant-design-vue';
+import { posts } from '../data/posts';
 import {
   CalendarOutlined,
   FileTextOutlined,
@@ -278,47 +191,36 @@ import {
   TagOutlined,
   ClockCircleOutlined,
   NotificationOutlined,
-} from "@ant-design/icons-vue";
+} from '@ant-design/icons-vue';
 
 const router = useRouter();
 const drawerOpen = ref(false);
-const activeTab = ref("overview");
-const subscriptionEmail = ref("");
-const { isDarkMode } = useTheme();
+const activeTab = ref('overview');
+const subscriptionEmail = ref('');
 
 const featuredPosts = computed(() => posts.slice(0, 3));
-const latestPosts = computed(() =>
-  [...posts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3),
-);
-const techCount = computed(
-  () => posts.filter((p) => p.category === "技術").length,
-);
+const latestPosts = computed(() => [...posts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3));
+const techCount = computed(() => posts.filter(p => p.category === '技術').length);
 const tagCount = computed(() => {
   const tags = new Set();
-  posts.forEach((p) => p.tags.forEach((t) => tags.add(t)));
+  posts.forEach(p => p.tags.forEach(t => tags.add(t)));
   return tags.size;
 });
 
-const statisticColors = computed(() => ({
-  total: isDarkMode.value ? "#60a5fa" : "#3f51b5",
-  tech: isDarkMode.value ? "#10b981" : "#4caf50",
-  tags: isDarkMode.value ? "#f59e0b" : "#ff9800",
-}));
-
 const quickActions = computed(() => [
   {
-    title: "瀏覽所有文章",
-    description: "快速進入文章列表查看所有內容。",
-    action: () => router.push("/posts"),
+    title: '瀏覽所有文章',
+    description: '快速進入文章列表查看所有內容。',
+    action: () => router.push('/posts'),
   },
   {
-    title: "查看關於我",
-    description: "前往 About 頁面看更多個人資訊與聯絡方式。",
-    action: () => router.push("/about"),
+    title: '查看關於我',
+    description: '前往 About 頁面看更多個人資訊與聯絡方式。',
+    action: () => router.push('/about'),
   },
   {
-    title: "閱讀最新文章",
-    description: `直接打開最新文章：${latestPosts.value[0]?.title ?? "尚無資料"}`,
+    title: '閱讀最新文章',
+    description: `直接打開最新文章：${latestPosts.value[0]?.title ?? '尚無資料'}`,
     action: () => {
       if (latestPosts.value[0]) {
         router.push(`/posts/${latestPosts.value[0].id}`);
@@ -333,16 +235,15 @@ const openDrawer = () => {
 
 const showWelcome = () => {
   notification.info({
-    message: "探索提示",
-    description:
-      "你可以切換 Tabs、打開 Drawer，或直接前往文章頁體驗更多互動元件。",
+    message: '探索提示',
+    description: '你可以切換 Tabs、打開 Drawer，或直接前往文章頁體驗更多互動元件。',
   });
 };
 
 const submitSubscription = () => {
   drawerOpen.value = false;
   message.success(`已收到 ${subscriptionEmail.value} 的訂閱申請`);
-  subscriptionEmail.value = "";
+  subscriptionEmail.value = '';
 };
 </script>
 
@@ -361,7 +262,7 @@ const submitSubscription = () => {
 .home-carousel {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .carousel-item {
@@ -379,10 +280,6 @@ const submitSubscription = () => {
   text-align: center;
 }
 
-.theme-dark .carousel-content {
-  color: var(--text-h);
-}
-
 .carousel-text {
   padding: 0 40px;
 }
@@ -394,10 +291,6 @@ const submitSubscription = () => {
 
 :deep(.ant-carousel .slick-dots li button) {
   background: #fff;
-}
-
-.theme-dark :deep(.ant-carousel .slick-dots li button) {
-  background: var(--text);
 }
 
 :deep(.ant-carousel .slick-dots li.slick-active button) {
