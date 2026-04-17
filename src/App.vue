@@ -26,7 +26,6 @@
           <a-sub-menu key="sub1">
             <template #icon><folder-outlined /></template>
             <template #title>個人部落格</template>
-
             <a-menu-item key="Home">
               <template #icon><home-outlined /></template>
               <router-link to="/">首頁看板</router-link>
@@ -44,7 +43,6 @@
           <a-sub-menu key="sub2">
             <template #icon><appstore-outlined /></template>
             <template #title>表單管理</template>
-
             <a-menu-item key="Form">
               <template #icon><file-search-outlined /></template>
               <router-link to="/form">技術人才查詢</router-link>
@@ -106,14 +104,11 @@
                       <router-link to="/systemsettings"> 系統設定 </router-link>
                     </a-menu-item>
                     <a-menu-divider />
-                    <a-menu-item key="3">
-                      <a-menu-item
-                        key="3"
-                        @click="showLogoutConfirm"
-                      >
-                        <logout-outlined />
-                        登出
-                      </a-menu-item>
+                    <a-menu-item
+                      key="3"
+                      @click="showLogoutConfirm"
+                    >
+                      <logout-outlined /> 登出
                     </a-menu-item>
                   </a-menu>
                 </template>
@@ -137,6 +132,8 @@
           Personal Management System ©2026 Created by Manus
         </a-layout-footer>
       </a-layout>
+
+      <ChatRobot />
     </a-layout>
   </a-config-provider>
 </template>
@@ -145,6 +142,8 @@
 import { computed, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { Modal, message, theme } from "ant-design-vue";
+// 1. 確保引入 AI 組件
+import ChatRobot from "./components/ChatBot.vue";
 import {
   HomeOutlined,
   FileTextOutlined,
@@ -166,8 +165,9 @@ import { useTheme } from "./composables/useTheme";
 const route = useRoute();
 const collapsed = ref(false);
 const selectedKeys = ref(["Home"]);
-const openKeys = ref(["sub1"]); // 預設展開第一個資料夾
+const openKeys = ref(["sub1"]);
 const { isDarkMode } = useTheme();
+
 const antdTheme = computed(() => ({
   algorithm: isDarkMode.value ? theme.darkAlgorithm : theme.defaultAlgorithm,
   token: {
@@ -186,25 +186,20 @@ const showLogoutConfirm = () => {
     content: "您確定要登出個人管理系統嗎？",
     okText: "確認登出",
     cancelText: "我再想想",
-    okType: "danger", // 讓按鈕變成紅色，更有警告感
+    okType: "danger",
     onOk() {
-      // 這裡不寫 router.push，改用模擬提示
       const hide = message.loading("正在登出系統...", 0);
-
       setTimeout(() => {
-        hide(); // 關閉 Loading
+        hide();
         message.success("模擬登出成功！（僅供 UI 展示）");
       }, 1500);
     },
-    onCancel() {
-      console.log("使用者取消登出");
-    },
   });
 };
+
 watchEffect(() => {
   if (route.name) {
     selectedKeys.value = [route.name];
-    // 當路由切換時，自動根據名稱展開對應的資料夾
     if (["Home", "Posts", "About"].includes(route.name)) {
       openKeys.value = ["sub1"];
     } else if (["Form"].includes(route.name)) {
@@ -215,6 +210,7 @@ watchEffect(() => {
 </script>
 
 <style scoped>
+/* 原有樣式保持不變 */
 .logo {
   height: 32px;
   margin: 20px;
@@ -224,14 +220,12 @@ watchEffect(() => {
   justify-content: center;
   overflow: hidden;
 }
-
 .logo-text {
   margin-left: 12px;
   font-size: 1.1rem;
   font-weight: bold;
   letter-spacing: 1px;
 }
-
 .trigger-btn {
   font-size: 18px;
   padding: 0 24px;
@@ -241,16 +235,13 @@ watchEffect(() => {
 .trigger-btn:hover {
   color: #1890ff;
 }
-
 .user-info {
   margin-right: 24px;
 }
-
 .layout {
   min-height: 100vh;
   background: var(--app-bg);
 }
-
 .app-header {
   background: var(--header-bg);
   padding: 0 24px;
@@ -260,12 +251,10 @@ watchEffect(() => {
   box-shadow: var(--header-shadow);
   color: var(--header-text);
 }
-
 .app-content {
   margin: 16px;
   background: transparent;
 }
-
 .content-shell {
   background: var(--surface-bg);
   padding: 24px;
@@ -276,19 +265,15 @@ watchEffect(() => {
     background-color 0.3s,
     box-shadow 0.3s;
 }
-
 .app-footer {
   text-align: center;
   font-size: 12px;
   color: var(--footer-text);
   background: var(--footer-bg);
 }
-
-/* 修正側欄文字與圖示間距 */
 :deep(.ant-menu-inline-collapsed) .ant-menu-submenu-title {
   padding: 0 32px;
 }
-
 .theme-dark :deep(.ant-breadcrumb) {
   color: rgba(255, 255, 255, 0.65);
 }

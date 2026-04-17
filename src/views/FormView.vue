@@ -364,6 +364,7 @@ const formState = reactive({
   section: undefined,
   level: "Junior",
   tech: [],
+  role: undefined,
 });
 
 // --- 3. 計算屬性 (連動選單邏輯) ---
@@ -461,6 +462,7 @@ const handleAdd = () => {
     department: undefined,
     section: undefined,
     level: "Junior",
+    role: undefined, // 重置職能
     tech: [],
   });
   modalVisible.value = true;
