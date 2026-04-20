@@ -1,6 +1,5 @@
-// src/mockData.js
+// src/data/mockData.js
 
-// 1. 組織架構定義
 export const hierarchy = {
   資訊處: {
     開發部: ["前端組", "後端組", "架構組"],
@@ -13,7 +12,16 @@ export const hierarchy = {
   },
 };
 
-// 2. 技術選項
+// 專案腳色 (Project Role)
+export const projectRoles = [
+  { value: "PG", label: "程式設計師 (PG)" },
+  { value: "SA", label: "系統分析師 (SA)" },
+  { value: "SD", label: "系統設計師 (SD)" },
+  { value: "BA", label: "商業分析師 (BA)" },
+  { value: "PM", label: "專案經理 (PM)" },
+];
+
+// 技術選項
 export const techOptions = [
   { value: "Vue", label: "Vue.js" },
   { value: "React", label: "React" },
@@ -24,7 +32,6 @@ export const techOptions = [
   { value: "TypeScript", label: "TypeScript" },
 ];
 
-// 3. 隨機生成 100 筆模擬數據
 export const generateMockList = (count = 100) => {
   const names = [
     "王大明",
@@ -36,7 +43,7 @@ export const generateMockList = (count = 100) => {
     "周芷若",
     "孫悟空",
   ];
-  const roles = ["前端", "後端", "全端", "測試"];
+  const functions = ["前端", "後端", "測試", "維運"]; // 這是職能
   const levels = ["Junior", "Senior", "Expert"];
   const techs = ["Vue", "React", "Node", "Python", "Go", "Java", "TypeScript"];
 
@@ -44,10 +51,8 @@ export const generateMockList = (count = 100) => {
   for (let i = 1; i <= count; i++) {
     const divKeys = Object.keys(hierarchy);
     const randomDiv = divKeys[i % divKeys.length];
-
     const deptKeys = Object.keys(hierarchy[randomDiv]);
     const randomDept = deptKeys[Math.floor(Math.random() * deptKeys.length)];
-
     const secKeys = hierarchy[randomDiv][randomDept];
     const randomSec = secKeys[Math.floor(Math.random() * secKeys.length)];
 
@@ -57,7 +62,8 @@ export const generateMockList = (count = 100) => {
       division: randomDiv,
       department: randomDept,
       section: randomSec,
-      role: roles[i % roles.length],
+      role: functions[i % functions.length], // 職能 (原本的欄位名 role)
+      projectRole: projectRoles[i % projectRoles.length].value, // 專案腳色 (新增欄位)
       level: levels[i % levels.length],
       tech: [techs[i % techs.length], techs[(i + 2) % techs.length]].filter(
         (v, k, a) => a.indexOf(v) === k,

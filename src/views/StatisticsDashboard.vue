@@ -1,145 +1,436 @@
 <template>
-  <div style="padding: 24px">
-    <a-row :gutter="16">
-      <a-col :span="6">
-        <a-card>
-          <a-statistic
-            title="總人才數"
-            :value="allRawData.length"
-            suffix="人"
-            :value-style="{ color: statisticColors.total }"
-          />
-        </a-card>
-      </a-col>
-      <a-col :span="6">
-        <a-card>
-          <a-statistic
-            title="Vue 開發者"
-            :value="vueCount"
-            suffix="人"
-            :value-style="{ color: statisticColors.vue }"
-          />
-        </a-card>
-      </a-col>
-      <a-col :span="6">
-        <a-card>
-          <a-statistic
-            title="資深(Senior+) 佔比"
-            :value="seniorPercent"
-            suffix="%"
-            :precision="1"
-          />
-        </a-card>
-      </a-col>
-      <a-col :span="6">
-        <a-card>
-          <a-statistic
-            title="系統健康度"
-            value="99.9"
-            suffix="%"
-          />
-        </a-card>
-      </a-col>
-    </a-row>
-
-    <a-row
-      :gutter="16"
-      style="margin-top: 24px"
+  <div style="padding: 16px">
+    <a-card
+      :bordered="false"
+      body-style="padding: 0"
     >
-      <a-col :span="12">
-        <a-card title="各處室人力分佈">
-          <div
-            v-for="(count, div) in divisionStats"
-            :key="div"
-            style="margin-bottom: 16px"
+      <a-tabs
+        v-model:activeKey="dashboardTab"
+        type="card"
+        @change="clearDetail"
+      >
+        <a-tab-pane
+          key="role"
+          tab="專案角色人力分布"
+        >
+          <a-table
+            :columns="roleColumns"
+            :data-source="roleData"
+            :pagination="false"
+            bordered
+            size="middle"
+            class="main-table"
+            row-key="roleValue"
           >
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 8px;
-              "
-            >
-              <span>{{ div }}</span>
-              <span>{{ count }} 人</span>
-            </div>
-            <a-progress
-              :percent="(count / allRawData.length) * 100"
-              :show-info="false"
-            />
-          </div>
-        </a-card>
-      </a-col>
-
-      <a-col :span="12">
-        <a-card title="技術熱點排名">
-          <a-list
-            item-layout="horizontal"
-            :data-source="techRanking"
-          >
-            <template #renderItem="{ item, index }">
-              <a-list-item>
-                <a-badge
-                  :count="index + 1"
-                  :number-style="{
-                    backgroundColor:
-                      index < 3 ? badgeColors.top3 : badgeColors.others,
-                  }"
-                />
-                <span style="margin-left: 16px; flex: 1">{{ item.name }}</span>
-                <a-tag color="blue">{{ item.count }} 位使用者</a-tag>
-              </a-list-item>
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.key === 'roleLabel'">
+                <div class="role-cell">
+                  <div :class="['role-indicator', record.roleValue]"></div>
+                  <span class="role-text">{{ record.roleLabel }}</span>
+                </div>
+              </template>
+              <template v-else-if="allDepartments.includes(column.key)">
+                <div
+                  :class="[
+                    'clickable-count',
+                    { 'has-value': record[column.key] > 0 },
+                  ]"
+                  @click="handleMainClick('role', record.roleValue, column.key)"
+                >
+                  {{ record[column.key] > 0 ? record[column.key] : "-" }}
+                </div>
+              </template>
             </template>
-          </a-list>
-        </a-card>
-      </a-col>
-    </a-row>
+
+            <template #expandedRowRender="{ record: roleRecord }">
+              <div class="expand-box level-bg">
+                <div class="expand-title">
+                  階層分佈 (Jr/Sr/Exp)：{{ roleRecord.roleLabel }}
+                </div>
+                <a-table
+                  :columns="levelSubColumns"
+                  :data-source="getRoleLevelData(roleRecord.roleValue)"
+                  :pagination="false"
+                  size="small"
+                  bordered
+                >
+                  <template #bodyCell="{ column, record: subRecord }">
+                    <template v-if="column.key === 'level'"
+                      ><a-tag :color="getLevelColor(subRecord.level)">{{
+                        subRecord.level
+                      }}</a-tag></template
+                    >
+                    <template v-else-if="allDepartments.includes(column.key)">
+                      <div
+                        :class="[
+                          'clickable-sub-count',
+                          { active: subRecord[column.key] > 0 },
+                        ]"
+                        @click="
+                          handleSubClick(
+                            'role',
+                            roleRecord.roleValue,
+                            column.key,
+                            'level',
+                            subRecord.level,
+                          )
+                        "
+                      >
+                        {{
+                          subRecord[column.key] > 0
+                            ? subRecord[column.key]
+                            : "-"
+                        }}
+                      </div>
+                    </template>
+                  </template>
+                </a-table>
+              </div>
+            </template>
+          </a-table>
+        </a-tab-pane>
+
+        <a-tab-pane
+          key="tech"
+          tab="技術人才庫"
+        >
+          <a-table
+            :columns="techColumns"
+            :data-source="techData"
+            :pagination="false"
+            bordered
+            size="middle"
+            class="main-table"
+            row-key="techValue"
+          >
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.key === 'techLabel'"
+                ><span class="tech-text">{{ record.techLabel }}</span></template
+              >
+              <template v-else-if="allDepartments.includes(column.key)">
+                <div
+                  :class="[
+                    'clickable-count',
+                    { 'has-value': record[column.key] > 0 },
+                  ]"
+                  @click="handleMainClick('tech', record.techValue, column.key)"
+                >
+                  {{ record[column.key] > 0 ? record[column.key] : "-" }}
+                </div>
+              </template>
+            </template>
+            <template #expandedRowRender="{ record: techRecord }">
+              <div class="expand-box job-bg">
+                <div class="expand-title">
+                  職能應用分佈：{{ techRecord.techLabel }}
+                </div>
+                <a-table
+                  :columns="jobSubColumns"
+                  :data-source="getTechJobData(techRecord.techValue)"
+                  :pagination="false"
+                  size="small"
+                  bordered
+                >
+                  <template #bodyCell="{ column, record: subRecord }">
+                    <template v-if="column.key === 'job'"
+                      ><a-badge
+                        status="processing"
+                        :text="subRecord.job"
+                    /></template>
+                    <template v-else-if="allDepartments.includes(column.key)">
+                      <div
+                        :class="[
+                          'clickable-sub-count',
+                          { active: subRecord[column.key] > 0 },
+                        ]"
+                        @click="
+                          handleSubClick(
+                            'tech',
+                            techRecord.techValue,
+                            column.key,
+                            'role',
+                            subRecord.job,
+                          )
+                        "
+                      >
+                        {{
+                          subRecord[column.key] > 0
+                            ? subRecord[column.key]
+                            : "-"
+                        }}
+                      </div>
+                    </template>
+                  </template>
+                </a-table>
+              </div>
+            </template>
+          </a-table>
+        </a-tab-pane>
+      </a-tabs>
+    </a-card>
+
+    <a-card
+      v-if="detailList.length >= 0"
+      title="篩選人才清單"
+      style="margin-top: 24px"
+      class="detail-card"
+    >
+      <template #extra>
+        <span class="filter-tag">篩選：{{ activeFilterText }}</span>
+        <a-button
+          type="link"
+          danger
+          @click="clearDetail"
+          >重置</a-button
+        >
+      </template>
+      <a-table
+        :columns="detailColumns"
+        :data-source="detailList"
+        row-key="id"
+        size="small"
+        :pagination="{ pageSize: 5 }"
+      >
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.key === 'tech'">
+            <a-tag
+              v-for="t in record.tech"
+              :key="t"
+              color="blue"
+              style="font-size: 11px"
+              >{{ t }}</a-tag
+            >
+          </template>
+        </template>
+      </a-table>
+    </a-card>
   </div>
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { generateMockList } from "../data/mockData"; // 引用你的模擬數據
-import { useTheme } from "../composables/useTheme";
+import { ref, computed } from "vue";
+import {
+  generateMockList,
+  hierarchy,
+  projectRoles,
+  techOptions,
+} from "../data/mockData";
 
-const { isDarkMode } = useTheme();
 const allRawData = generateMockList(100);
+const dashboardTab = ref("role");
+const detailList = ref([]);
+const activeFilterText = ref("");
 
-// 統計邏輯
-const vueCount = computed(
-  () => allRawData.filter((i) => i.tech.includes("Vue")).length,
-);
-const seniorPercent = computed(
-  () =>
-    (allRawData.filter((i) => i.level !== "Junior").length /
-      allRawData.length) *
-    100,
-);
-
-const statisticColors = computed(() => ({
-  total: isDarkMode.value ? "#60a5fa" : "#3f51b5",
-  vue: isDarkMode.value ? "#10b981" : "#42b983",
-}));
-
-const badgeColors = computed(() => ({
-  top3: isDarkMode.value ? "#ef4444" : "#f5222d",
-  others: isDarkMode.value ? "#6b7280" : "#bfbfbf",
-}));
-
-const divisionStats = computed(() => {
-  return allRawData.reduce((acc, cur) => {
-    acc[cur.division] = (acc[cur.division] || 0) + 1;
-    return acc;
-  }, {});
+const levels = ["Junior", "Senior", "Expert"];
+const jobs = ["前端", "後端", "測試", "維運"];
+const allDepartments = computed(() => {
+  const depts = [];
+  Object.values(hierarchy).forEach((div) => depts.push(...Object.keys(div)));
+  return depts;
 });
 
-const techRanking = computed(() => {
-  const counts = {};
-  allRawData.forEach((i) =>
-    i.tech.forEach((t) => (counts[t] = (counts[t] || 0) + 1)),
+// 通用 Column 生成
+const createCols = (title, key, width = 160) => {
+  const c = [{ title, dataIndex: key, key, width, fixed: "left" }];
+  allDepartments.value.forEach((d) =>
+    c.push({ title: d, dataIndex: d, key: d, align: "center" }),
   );
-  return Object.entries(counts)
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count);
-});
+  return c;
+};
+
+// 數據定義
+const roleColumns = computed(() => createCols("專案角色", "roleLabel"));
+const roleData = computed(() =>
+  projectRoles.map((r) => {
+    const row = { roleValue: r.value, roleLabel: r.label };
+    allDepartments.value.forEach(
+      (d) =>
+        (row[d] = allRawData.filter(
+          (i) => i.department === d && i.projectRole === r.value,
+        ).length),
+    );
+    return row;
+  }),
+);
+
+const techColumns = computed(() => createCols("技術名稱", "techLabel", 140));
+const techData = computed(() =>
+  techOptions.map((t) => {
+    const row = { techValue: t.value, techLabel: t.label };
+    allDepartments.value.forEach(
+      (d) =>
+        (row[d] = allRawData.filter(
+          (i) => i.department === d && i.tech.includes(t.value),
+        ).length),
+    );
+    return row;
+  }),
+);
+
+const levelSubColumns = computed(() => createCols("熟練等級", "level", 120));
+const getRoleLevelData = (rv) =>
+  levels.map((lv) => {
+    const row = { level: lv };
+    allDepartments.value.forEach(
+      (d) =>
+        (row[d] = allRawData.filter(
+          (i) => i.department === d && i.projectRole === rv && i.level === lv,
+        ).length),
+    );
+    return row;
+  });
+
+const jobSubColumns = computed(() => createCols("應用職能", "job", 120));
+const getTechJobData = (tv) =>
+  jobs.map((j) => {
+    const row = { job: j };
+    allDepartments.value.forEach(
+      (d) =>
+        (row[d] = allRawData.filter(
+          (i) => i.department === d && i.tech.includes(tv) && i.role === j,
+        ).length),
+    );
+    return row;
+  });
+
+// 點擊事件
+const handleMainClick = (type, val, dept) => {
+  const isRole = type === "role";
+  detailList.value = allRawData.filter(
+    (i) =>
+      i.department === dept &&
+      (isRole ? i.projectRole === val : i.tech.includes(val)),
+  );
+  const label = isRole
+    ? projectRoles.find((r) => r.value === val).label
+    : techOptions.find((t) => t.value === val).label;
+  activeFilterText.value = `${dept} > ${label}`;
+};
+
+const handleSubClick = (type, mVal, dept, subF, subV) => {
+  const isRole = type === "role";
+  detailList.value = allRawData.filter(
+    (i) =>
+      i.department === dept &&
+      (isRole ? i.projectRole === mVal : i.tech.includes(mVal)) &&
+      i[subF] === subV,
+  );
+  const label = isRole
+    ? projectRoles.find((r) => r.value === mVal).label
+    : techOptions.find((t) => t.value === mVal).label;
+  activeFilterText.value = `${dept} > ${label} > ${subV}`;
+};
+
+const clearDetail = () => {
+  detailList.value = [];
+  activeFilterText.value = "";
+};
+const getLevelColor = (lv) =>
+  ({ Expert: "purple", Senior: "orange", Junior: "blue" })[lv];
+
+const detailColumns = [
+  { title: "姓名", dataIndex: "name", key: "name", width: 90 },
+  { title: "部門", dataIndex: "department", key: "department" },
+  { title: "專案角色", dataIndex: "projectRole", key: "projectRole" },
+  { title: "等級", dataIndex: "level", key: "level" },
+  { title: "技術技能", dataIndex: "tech", key: "tech" },
+];
 </script>
+
+<style scoped>
+.main-table :deep(.ant-table) {
+  font-size: 14px !important;
+}
+.main-table :deep(th),
+.main-table :deep(td) {
+  padding: 12px 8px !important;
+}
+
+/* 角色色標 */
+.role-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.role-indicator {
+  width: 4px;
+  height: 18px;
+  border-radius: 2px;
+}
+.role-indicator.PM {
+  background: #722ed1;
+}
+.role-indicator.SA {
+  background: #1890ff;
+}
+.role-indicator.SD {
+  background: #13c2c2;
+}
+.role-indicator.PG {
+  background: #52c41a;
+}
+.role-indicator.BA {
+  background: #faad14;
+}
+.role-text {
+  font-weight: 600;
+  color: #333;
+}
+
+.tech-text {
+  font-weight: bold;
+  color: #1890ff;
+}
+
+/* 點擊與數值樣式 */
+.clickable-count,
+.clickable-sub-count {
+  cursor: pointer;
+  transition: 0.2s;
+  border-radius: 4px;
+  color: #d9d9d9;
+}
+.clickable-count.has-value {
+  color: #1890ff;
+  font-weight: bold;
+}
+.clickable-count:hover {
+  background: #e6f7ff;
+  text-decoration: underline;
+}
+.clickable-sub-count.active {
+  color: #52c41a;
+  font-weight: bold;
+}
+.clickable-sub-count.active:hover {
+  background: #f6ffed;
+  box-shadow: 0 0 0 1px #b7eb8f;
+}
+
+/* 展開容器 */
+.expand-box {
+  padding: 12px;
+  border-radius: 4px;
+  margin: -8px;
+}
+.level-bg {
+  background: #f9f0ff;
+}
+.job-bg {
+  background: #f6ffed;
+}
+.expand-title {
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 13px;
+  color: #666;
+}
+
+.filter-tag {
+  background: #eee;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-right: 8px;
+}
+</style>
