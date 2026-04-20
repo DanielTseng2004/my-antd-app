@@ -90,7 +90,9 @@
             <SendOutlined
               @click="handleSend"
               :style="{
-                color: userInput.trim() ? '#1677ff' : '#d9d9d9',
+                color: userInput.trim()
+                  ? 'var(--color-primary)'
+                  : 'var(--input-disabled-color)',
                 cursor: 'pointer',
               }"
             />
@@ -256,13 +258,13 @@ const handleOptionClick = (opt) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f2f5; /* 稍微加深底色讓機器人更明顯 */
+  background: var(--ai-avatar-bg);
 }
 
 /* 讓內部的機器人圖示也跟著變大 */
 .avatar :deep(.anticon) {
   font-size: 20px; /* 加大圖示本體 */
-  color: #8c8c8c;
+  color: var(--ai-avatar-icon-color);
 }
 
 /* 修正訊息包裹器，確保頭像跟氣泡頂部對齊 */
@@ -311,17 +313,16 @@ const handleOptionClick = (opt) => {
 }
 
 .user .bubble {
-  background: #1677ff;
-  color: white;
+  background: var(--chat-message-user-bg);
+  color: var(--chat-message-user-text);
   border-bottom-right-radius: 2px;
 }
 
 .ai .bubble {
-  background: var(--surface-bg);
-  color: var(--text);
+  background: var(--chat-message-ai-bg);
+  color: var(--text-primary);
   border-bottom-left-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  background: #ffffff24;
 }
 
 /* 選項按鈕區域 */
@@ -339,14 +340,14 @@ const handleOptionClick = (opt) => {
   border-radius: 20px;
   padding: 4px 12px;
   background: var(--surface-bg);
-  border: 1px solid #1677ff;
-  color: #1677ff;
+  border: 1px solid var(--quick-option-border);
+  color: var(--quick-option-text);
   transition: all 0.3s;
   user-select: none;
 }
 
 .quick-opt:hover {
-  background: #1677ff;
+  background: var(--quick-option-border);
   color: #fff;
 }
 
@@ -365,11 +366,11 @@ const handleOptionClick = (opt) => {
 .cursor {
   animation: blink 1s infinite;
   font-weight: bold;
-  color: #1677ff;
+  color: var(--color-primary);
 }
 
 .close-btn:hover {
-  color: #ff4d4f;
+  color: var(--color-error);
 }
 
 @keyframes blink {
@@ -383,7 +384,7 @@ const handleOptionClick = (opt) => {
   width: 4px;
 }
 .message-container::-webkit-scrollbar-thumb {
-  background: #e8e8e8;
+  background: var(--border-color);
   border-radius: 10px;
 }
 

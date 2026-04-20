@@ -141,9 +141,9 @@
                 type="default"
                 @click="handleAdd"
                 style="
-                  background-color: #52c41a;
+                  background-color: var(--color-success);
                   color: white;
-                  border-color: #52c41a;
+                  border-color: var(--color-success);
                 "
               >
                 <plus-outlined />新增人才資料
@@ -412,10 +412,10 @@ const modalDepts = computed(() =>
 );
 
 const deleteLinkColor = computed(() =>
-  isDarkMode.value ? "#ff7875" : "#ff4d4f",
+  isDarkMode.value ? "var(--color-error)" : "var(--color-error)",
 );
 const pageBackground = computed(() =>
-  isDarkMode.value ? "var(--app-bg)" : "#f0f2f5",
+  isDarkMode.value ? "var(--bg-app)" : "var(--bg-secondary)",
 );
 
 const fetchData = () => {

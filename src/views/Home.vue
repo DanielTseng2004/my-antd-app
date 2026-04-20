@@ -64,11 +64,15 @@
 
     <a-typography style="margin-top: 40px">
       <a-typography-title>
-        <smile-outlined style="margin-right: 12px; color: #1890ff" />
+        <smile-outlined
+          style="margin-right: 12px; color: var(--icon-info-color)"
+        />
         歡迎來到我的個人部落格
       </a-typography-title>
       <a-typography-paragraph>
-        <rocket-outlined style="margin-right: 8px; color: #faad14" />
+        <rocket-outlined
+          style="margin-right: 8px; color: var(--icon-warning-color)"
+        />
         這裡是我分享技術心得、生活點滴與開發日誌的地方。
       </a-typography-paragraph>
     </a-typography>
@@ -146,9 +150,9 @@
     </a-tabs>
 
     <a-divider>
-      <star-outlined style="margin: 0 8px; color: #faad14" />
+      <star-outlined style="margin: 0 8px; color: var(--icon-warning-color)" />
       最新文章
-      <star-outlined style="margin: 0 8px; color: #faad14" />
+      <star-outlined style="margin: 0 8px; color: var(--icon-warning-color)" />
     </a-divider>
 
     <a-list
@@ -160,16 +164,20 @@
         <a-list-item key="item.title">
           <template #actions>
             <span>
-              <calendar-outlined style="margin-right: 8px; color: #1890ff" />
+              <calendar-outlined
+                style="margin-right: 8px; color: var(--icon-info-color)"
+              />
               {{ item.date }}
             </span>
             <span>
-              <tag-outlined style="margin-right: 8px; color: #faad14" />
+              <tag-outlined
+                style="margin-right: 8px; color: var(--icon-warning-color)"
+              />
               {{ item.category }}
             </span>
             <span>
               <clock-circle-outlined
-                style="margin-right: 8px; color: #eb2f96"
+                style="margin-right: 8px; color: var(--stat-visitors-color)"
               />
               {{ item.readTime }}
             </span>
@@ -300,9 +308,15 @@ const tagCount = computed(() => {
 });
 
 const statisticColors = computed(() => ({
-  total: isDarkMode.value ? "#60a5fa" : "#3f51b5",
-  tech: isDarkMode.value ? "#10b981" : "#4caf50",
-  tags: isDarkMode.value ? "#f59e0b" : "#ff9800",
+  total: isDarkMode.value
+    ? "var(--chart-total-color)"
+    : "var(--chart-total-color)",
+  tech: isDarkMode.value
+    ? "var(--chart-tech-color)"
+    : "var(--chart-tech-color)",
+  tags: isDarkMode.value
+    ? "var(--chart-tags-color)"
+    : "var(--chart-tags-color)",
 }));
 
 const quickActions = computed(() => [
@@ -401,6 +415,6 @@ const submitSubscription = () => {
 }
 
 :deep(.ant-carousel .slick-dots li.slick-active button) {
-  background: #1890ff;
+  background: var(--icon-info-color);
 }
 </style>

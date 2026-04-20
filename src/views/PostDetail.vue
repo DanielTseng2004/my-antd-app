@@ -25,13 +25,13 @@
     />
 
     <a-page-header
-      style="
-        border: 1px solid rgb(235, 237, 240);
-        margin-bottom: 24px;
-        padding: 16px;
-        border-radius: 8px;
-        background: #fff;
-      "
+      :style="{
+        border: `1px solid var(--border-color)`,
+        marginBottom: '24px',
+        padding: '16px',
+        borderRadius: '8px',
+        background: 'var(--bg-primary)',
+      }"
       :title="post.title"
       @back="() => $router.go(-1)"
     >
@@ -279,7 +279,9 @@ const feedbackForm = reactive({
   comment: "",
 });
 
-const heartColor = computed(() => (isDarkMode.value ? "#ff7875" : "#ff4d4f"));
+const heartColor = computed(() =>
+  isDarkMode.value ? "var(--color-error)" : "var(--color-error)",
+);
 const textColor = computed(() => (isDarkMode.value ? "var(--text)" : "#666"));
 const titleColor = computed(() =>
   isDarkMode.value ? "var(--text-h)" : "#333",
@@ -348,9 +350,11 @@ const submitFeedback = () => {
 }
 
 .post-summary-box {
-  background: v-bind(isDarkMode ? "var(--surface-muted)": "#f9f9f9");
+  background: v-bind(
+    isDarkMode ? "var(--surface-muted)": "var(--bg-secondary)"
+  );
   padding: 16px;
-  border-left: 4px solid #1890ff;
+  border-left: 4px solid var(--icon-info-color);
   border-radius: 4px;
   margin-bottom: 24px;
   font-style: italic;

@@ -1,0 +1,468 @@
+/* ===== Ant Design 組件樣式覆蓋 ===== */
+
+/* 確保 Ant Design 組件使用全域變數 */
+#app :deep(.ant-btn) {
+  transition: all var(--transition-fast);
+}
+
+#app :deep(.ant-btn-primary) {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+#app :deep(.ant-btn-primary:hover) {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+#app :deep(.ant-input),
+#app :deep(.ant-input-number),
+#app :deep(.ant-select-selector),
+#app :deep(.ant-picker) {
+  background-color: var(--bg-primary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+  transition: all var(--transition-fast);
+}
+
+#app :deep(.ant-input:focus),
+#app :deep(.ant-input-number:focus),
+#app :deep(.ant-select-selector:focus),
+#app :deep(.ant-picker:focus) {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px var(--color-primary-light) !important;
+}
+
+#app :deep(.ant-input-disabled),
+#app :deep(.ant-input-number-disabled),
+#app :deep(.ant-select-disabled .ant-select-selector),
+#app :deep(.ant-picker-disabled) {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-disabled) !important;
+}
+
+#app :deep(.ant-card) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+}
+
+#app :deep(.ant-card:hover) {
+  box-shadow: var(--shadow-md);
+}
+
+#app :deep(.ant-card-head) {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-card-body) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-table) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-table-thead > tr > th) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-table-tbody > tr > td) {
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-table-tbody > tr:hover > td) {
+  background-color: var(--bg-secondary);
+}
+
+#app :deep(.ant-menu) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-menu-item) {
+  color: var(--text-secondary);
+}
+
+#app :deep(.ant-menu-item:hover) {
+  color: var(--color-primary);
+}
+
+#app :deep(.ant-menu-item-selected) {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+#app :deep(.ant-layout) {
+  background-color: var(--bg-app);
+}
+
+#app :deep(.ant-layout-header) {
+  background-color: var(--color-primary);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+#app :deep(.ant-layout-sider) {
+  background-color: var(--bg-primary);
+}
+
+#app :deep(.ant-layout-content) {
+  background-color: var(--bg-app);
+}
+
+#app :deep(.ant-layout-footer) {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+#app :deep(.ant-divider) {
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-tag) {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+#app :deep(.ant-tag-blue) {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+#app :deep(.ant-tag-green) {
+  background-color: rgba(82, 196, 26, 0.1);
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+#app :deep(.ant-tag-orange) {
+  background-color: rgba(250, 173, 20, 0.1);
+  color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+#app :deep(.ant-tag-red) {
+  background-color: rgba(255, 77, 79, 0.1);
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+#app :deep(.ant-alert) {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-alert-success) {
+  background-color: rgba(82, 196, 26, 0.1);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+#app :deep(.ant-alert-warning) {
+  background-color: rgba(250, 173, 20, 0.1);
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+#app :deep(.ant-alert-error) {
+  background-color: rgba(255, 77, 79, 0.1);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+#app :deep(.ant-alert-info) {
+  background-color: rgba(22, 119, 255, 0.1);
+  border-color: var(--color-info);
+  color: var(--color-info);
+}
+
+#app :deep(.ant-modal-content) {
+  background-color: var(--bg-primary);
+}
+
+#app :deep(.ant-modal-header) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-modal-title) {
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-modal-close-x) {
+  color: var(--text-secondary);
+}
+
+#app :deep(.ant-modal-footer) {
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-message) {
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-notification) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-notification-notice-close-x) {
+  color: var(--text-secondary);
+}
+
+#app :deep(.ant-popover-inner) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-popover-inner-content) {
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-tooltip-inner) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-dropdown-menu) {
+  background-color: var(--bg-primary);
+}
+
+#app :deep(.ant-dropdown-menu-item) {
+  color: var(--text-secondary);
+}
+
+#app :deep(.ant-dropdown-menu-item:hover) {
+  background-color: var(--bg-secondary);
+  color: var(--color-primary);
+}
+
+#app :deep(.ant-breadcrumb-link) {
+  color: var(--text-secondary);
+}
+
+#app :deep(.ant-breadcrumb-link:hover) {
+  color: var(--color-primary);
+}
+
+#app :deep(.ant-pagination-item) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-pagination-item a) {
+  color: var(--text-secondary);
+}
+
+#app :deep(.ant-pagination-item-active) {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+#app :deep(.ant-pagination-item-active a) {
+  color: white;
+}
+
+#app :deep(.ant-spin) {
+  color: var(--color-primary);
+}
+
+#app :deep(.ant-progress-bg) {
+  background-color: var(--color-primary);
+}
+
+#app :deep(.ant-rate-star) {
+  color: var(--text-tertiary);
+}
+
+#app :deep(.ant-rate-star-full) {
+  color: var(--color-warning);
+}
+
+#app :deep(.ant-checkbox-inner) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-checkbox-checked .ant-checkbox-inner) {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+#app :deep(.ant-radio-inner) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-radio-checked .ant-radio-inner) {
+  border-color: var(--color-primary);
+}
+
+#app :deep(.ant-switch) {
+  background-color: var(--text-tertiary);
+}
+
+#app :deep(.ant-switch-checked) {
+  background-color: var(--color-primary);
+}
+
+#app :deep(.ant-slider-track) {
+  background-color: var(--color-primary);
+}
+
+#app :deep(.ant-slider-handle) {
+  border-color: var(--color-primary);
+}
+
+#app :deep(.ant-slider-handle:focus) {
+  box-shadow: 0 0 0 5px var(--color-primary-light);
+}
+
+#app :deep(.ant-tree-node-content-wrapper:hover) {
+  background-color: var(--bg-secondary);
+}
+
+#app :deep(.ant-tree-node-selected .ant-tree-node-content-wrapper) {
+  background-color: var(--color-primary-light);
+}
+
+#app :deep(.ant-tabs-tab) {
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-tabs-tab:hover) {
+  color: var(--color-primary);
+}
+
+#app :deep(.ant-tabs-tab-active) {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+#app :deep(.ant-tabs-ink-bar) {
+  background-color: var(--color-primary);
+}
+
+#app :deep(.ant-tabs-content) {
+  background-color: var(--bg-primary);
+}
+
+#app :deep(.ant-collapse) {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+#app :deep(.ant-collapse-header) {
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-collapse-content) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-result) {
+  background-color: var(--bg-primary);
+}
+
+#app :deep(.ant-result-title) {
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-result-subtitle) {
+  color: var(--text-secondary);
+}
+
+#app :deep(.ant-empty-description) {
+  color: var(--text-secondary);
+}
+
+#app :deep(.ant-statistic-title) {
+  color: var(--text-secondary);
+}
+
+#app :deep(.ant-statistic-content) {
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-form-item-label > label) {
+  color: var(--text-primary);
+}
+
+#app :deep(.ant-form-item-label > label::after) {
+  color: var(--color-error);
+}
+
+#app :deep(.ant-form-item-explain-error) {
+  color: var(--color-error);
+}
+
+#app :deep(.ant-form-item-has-error .ant-input),
+#app :deep(.ant-form-item-has-error .ant-select-selector) {
+  border-color: var(--color-error) !important;
+}
+
+/* ===== 玻璃態效果 ===== */
+
+.glass-effect {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-md);
+}
+
+/* ===== 響應式設計 ===== */
+
+@media (max-width: 768px) {
+  #app :deep(.ant-layout-header) {
+    padding: 0 var(--spacing-lg);
+  }
+
+  #app :deep(.ant-layout-sider) {
+    width: 100% !important;
+  }
+
+  #app :deep(.ant-layout-content) {
+    padding: var(--spacing-lg);
+  }
+
+  #app :deep(.ant-layout-footer) {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 576px) {
+  #app :deep(.ant-layout-header) {
+    padding: 0 var(--spacing-md);
+  }
+
+  #app :deep(.ant-layout-content) {
+    padding: var(--spacing-md);
+  }
+
+  #app :deep(.ant-layout-footer) {
+    padding: var(--spacing-md);
+  }
+
+  #app :deep(.ant-table) {
+    font-size: var(--font-size-sm);
+  }
+
+  #app :deep(.ant-btn) {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+}

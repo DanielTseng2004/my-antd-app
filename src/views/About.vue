@@ -1,7 +1,9 @@
 <template>
   <div class="about">
     <a-typography-title :level="2">
-      <info-circle-outlined style="margin-right: 12px; color: #1890ff" />
+      <info-circle-outlined
+        style="margin-right: 12px; color: var(--icon-info-color)"
+      />
       關於我
     </a-typography-title>
 
@@ -42,7 +44,9 @@
       </a-card-meta>
 
       <a-divider>
-        <star-outlined style="color: #faad14; margin: 0 8px" />
+        <star-outlined
+          style="color: var(--icon-warning-color); margin: 0 8px"
+        />
       </a-divider>
 
       <a-tabs v-model:activeKey="activeTab">
@@ -52,7 +56,11 @@
         >
           <a-typography-paragraph style="font-size: 1.1rem; line-height: 1.8">
             <rocket-outlined
-              style="margin-right: 8px; color: #faad14; font-size: 1.2rem"
+              style="
+                margin-right: 8px;
+                color: var(--icon-warning-color);
+                font-size: 1.2rem;
+              "
             />
             這是我的個人部落格，用於分享我的學習過程、技術見解和生活中的點滴。我致力於探索最前沿的前端技術，並將複雜的概念轉化為易於理解的文章。
           </a-typography-paragraph>
@@ -77,7 +85,9 @@
             :level="4"
             style="margin-top: 8px"
           >
-            <code-outlined style="margin-right: 8px; color: #722ed1" />
+            <code-outlined
+              style="margin-right: 8px; color: var(--icon-code-color)"
+            />
             技術棧與熟練度
           </a-typography-title>
           <div style="margin-bottom: 32px">
@@ -108,7 +118,9 @@
             :level="4"
             style="margin-top: 32px"
           >
-            <history-outlined style="margin-right: 8px; color: #fa541c" />
+            <history-outlined
+              style="margin-right: 8px; color: var(--icon-warning-color)"
+            />
             個人經歷
           </a-typography-title>
           <a-timeline
@@ -141,7 +153,9 @@
             :level="4"
             style="margin-top: 8px"
           >
-            <phone-outlined style="margin-right: 8px; color: #1890ff" />
+            <phone-outlined
+              style="margin-right: 8px; color: var(--icon-info-color)"
+            />
             聯繫我
           </a-typography-title>
           <a-row :gutter="[16, 16]">
@@ -150,7 +164,9 @@
                 size="small"
                 hoverable
               >
-                <mail-outlined style="margin-right: 8px; color: #ff4d4f" />
+                <mail-outlined
+                  style="margin-right: 8px; color: var(--icon-error-color)"
+                />
                 Email: <a href="mailto:manus@example.com">manus@example.com</a>
               </a-card>
             </a-col>
@@ -159,7 +175,9 @@
                 size="small"
                 hoverable
               >
-                <github-outlined style="margin-right: 8px; color: #000" />
+                <github-outlined
+                  style="margin-right: 8px; color: var(--icon-github-color)"
+                />
                 GitHub:
                 <a
                   href="https://github.com/manus"
@@ -173,7 +191,9 @@
                 size="small"
                 hoverable
               >
-                <linkedin-outlined style="margin-right: 8px; color: #0a66c2" />
+                <linkedin-outlined
+                  style="margin-right: 8px; color: var(--icon-linkedin-color)"
+                />
                 LinkedIn:
                 <a
                   href="https://linkedin.com/in/manus"
@@ -187,7 +207,9 @@
                 size="small"
                 hoverable
               >
-                <twitter-outlined style="margin-right: 8px; color: #1da1f2" />
+                <twitter-outlined
+                  style="margin-right: 8px; color: var(--icon-twitter-color)"
+                />
                 Twitter:
                 <a
                   href="https://twitter.com/manus"
@@ -198,7 +220,7 @@
             </a-col>
           </a-row>
 
-          <a-card style="margin-top: 24px; background: #fafcff">
+          <a-card style="margin-top: 24px; background: var(--card-contact-bg)">
             <a-form
               layout="vertical"
               @finish="submitContact"
@@ -253,7 +275,7 @@
       </a-tabs>
 
       <a-divider>
-        <heart-outlined style="color: #ff4d4f; margin: 0 8px" />
+        <heart-outlined style="color: var(--stat-heart-color); margin: 0 8px" />
       </a-divider>
 
       <a-row
@@ -268,7 +290,7 @@
           <a-statistic
             title="文章數量"
             :value="5"
-            :value-style="{ color: '#1890ff' }"
+            :value-style="{ color: 'var(--stat-articles-color)' }"
           >
             <template #prefix><file-text-outlined /></template>
           </a-statistic>
@@ -281,7 +303,7 @@
           <a-statistic
             title="技術棧"
             :value="8"
-            :value-style="{ color: '#52c41a' }"
+            :value-style="{ color: 'var(--stat-skills-color)' }"
           >
             <template #prefix><code-outlined /></template>
           </a-statistic>
@@ -306,7 +328,7 @@
           <a-statistic
             title="訪客"
             :value="128"
-            :value-style="{ color: '#eb2f96' }"
+            :value-style="{ color: 'var(--stat-visitors-color)' }"
           >
             <template #prefix><user-outlined /></template>
           </a-statistic>
@@ -383,11 +405,15 @@ import { useTheme } from "../composables/useTheme";
 const { isDarkMode } = useTheme();
 
 const skills = [
-  { name: "Vue 3 (Composition API)", percent: 95, color: "#42b883" },
-  { name: "Vite & Build Tools", percent: 85, color: "#646cff" },
-  { name: "Ant Design Vue", percent: 90, color: "#1890ff" },
-  { name: "TypeScript", percent: 80, color: "#3178c6" },
-  { name: "Node.js", percent: 75, color: "#339933" },
+  {
+    name: "Vue 3 (Composition API)",
+    percent: 95,
+    color: "var(--icon-vue-color)",
+  },
+  { name: "Vite & Build Tools", percent: 85, color: "var(--icon-vite-color)" },
+  { name: "Ant Design Vue", percent: 90, color: "var(--icon-info-color)" },
+  { name: "TypeScript", percent: 80, color: "var(--icon-tech-color)" },
+  { name: "Node.js", percent: 75, color: "var(--icon-node-color)" },
 ];
 
 const text = ref("https://www.antdv.com/");
@@ -400,7 +426,7 @@ const contactForm = reactive({
 });
 
 const avatarBackground = computed(() =>
-  isDarkMode.value ? "#52c41a" : "#87d068",
+  isDarkMode.value ? "var(--avatar-dark-bg)" : "var(--avatar-light-bg)",
 );
 
 const collaborationItems = [

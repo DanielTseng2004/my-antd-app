@@ -1,4 +1,5 @@
 import { computed, ref, watch } from "vue";
+import { theme } from "ant-design-vue";
 
 const STORAGE_KEY = "app-theme";
 const themeMode = ref("light");
@@ -45,9 +46,19 @@ export const useTheme = () => {
     },
   });
 
+  // 生成 Ant Design 主題配置
+  const antdTheme = computed(() => ({
+    algorithm: isDarkMode.value ? theme.darkAlgorithm : theme.defaultAlgorithm,
+    token: {
+      colorPrimary: "#1677ff",
+      borderRadius: 8,
+    },
+  }));
+
   return {
     themeMode,
     isDarkMode,
+    antdTheme,
     setTheme: (mode) => {
       themeMode.value = mode;
     },

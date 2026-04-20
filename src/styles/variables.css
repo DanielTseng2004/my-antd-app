@@ -1,0 +1,475 @@
+/* ===== 全域 CSS 變數定義 ===== */
+
+/* 亮色模式 (預設) */
+:root {
+  /* 主色系 */
+  --color-primary: #1677ff;
+  --color-primary-light: #e6f7ff;
+  --color-primary-dark: #0050b3;
+
+  /* 文字色系 */
+  --text-primary: #000000;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-disabled: #cccccc;
+
+  /* 背景色系 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-tertiary: #fafafa;
+  --bg-app: #f3f6fb;
+
+  /* 邊框色系 */
+  --border-color: #d9d9d9;
+  --border-light: #f0f0f0;
+  --border-dark: #bfbfbf;
+
+  /* 狀態色系 */
+  --color-success: #52c41a;
+  --color-warning: #faad14;
+  --color-error: #ff4d4f;
+  --color-info: #1677ff;
+
+  /* 陰影 */
+  --shadow-sm:
+    0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 6px rgba(0, 0, 0, 0.03),
+    0 1px 12px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 3px 6px rgba(0, 0, 0, 0.12), 0 6px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --shadow-xl: 0 16px 40px rgba(2, 6, 23, 0.1);
+
+  /* 圓角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* 過渡 */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-base: 0.3s ease-in-out;
+  --transition-slow: 0.5s ease-in-out;
+
+  /* 字體 */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, Consolas, "Courier New", monospace;
+
+  /* 字號 */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 32px;
+
+  /* 行高 */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  --line-height-loose: 2;
+
+  /* 間距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+
+  /* 玻璃態效果 */
+  --glass-blur: blur(8px);
+  --glass-bg: rgba(255, 255, 255, 0.4);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+
+  /* 組件特定顏色 */
+  --avatar-light-bg: #87d068;
+  --avatar-dark-bg: #52c41a;
+  --input-disabled-color: #d9d9d9;
+  --ai-avatar-bg: #f0f2f5;
+  --ai-avatar-icon-color: #8c8c8c;
+  --chat-message-user-bg: #1677ff;
+  --chat-message-user-text: #ffffff;
+  --chat-message-ai-bg: #ffffff24;
+  --quick-option-border: #1677ff;
+  --quick-option-text: #1677ff;
+  --header-bg: #ffffff;
+  --header-text: #000000;
+  --header-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --surface-bg: #ffffff;
+
+  /* About 頁面特定顏色 */
+  --icon-info-color: #1890ff;
+  --icon-warning-color: #faad14;
+  --icon-error-color: #ff4d4f;
+  --icon-success-color: #52c41a;
+  --icon-primary-color: #1677ff;
+  --icon-tech-color: #3178c6;
+  --icon-node-color: #339933;
+  --icon-vue-color: #42b883;
+  --icon-vite-color: #646cff;
+  --icon-linkedin-color: #0a66c2;
+  --icon-twitter-color: #1da1f2;
+  --icon-github-color: #000000;
+  --icon-code-color: #722ed1;
+  --card-contact-bg: #fafcff;
+  --stat-articles-color: #1890ff;
+  --stat-skills-color: #52c41a;
+  --stat-visitors-color: #eb2f96;
+  --stat-heart-color: #ff4d4f;
+  --chart-total-color: #3f51b5;
+  --chart-tech-color: #4caf50;
+  --chart-tags-color: #ff9800;
+
+  /* StatisticsDashboard 特定顏色 */
+  --role-indicator-pm: #722ed1;
+  --role-indicator-sa: #1890ff;
+  --role-indicator-sd: #13c2c2;
+  --role-indicator-pg: #52c41a;
+  --role-indicator-ba: #faad14;
+  --role-text-color: #333333;
+  --tech-text-color: #1890ff;
+  --clickable-disabled-color: #d9d9d9;
+  --clickable-hover-bg: #e6f7ff;
+  --clickable-active-color: #52c41a;
+  --clickable-active-hover-bg: #f6ffed;
+  --clickable-active-shadow: #b7eb8f;
+  --expand-level-bg: #f9f0ff;
+  --expand-job-bg: #f6ffed;
+  --expand-title-color: #666666;
+  --filter-tag-bg: #eeeeee;
+
+  color-scheme: light;
+}
+
+/* 暗色模式 */
+:root[data-theme="dark"] {
+  /* 主色系 */
+  --color-primary: #177ddc;
+  --color-primary-light: #111d2c;
+  --color-primary-dark: #177ddc;
+
+  /* 文字色系 */
+  --text-primary: #e2e8f0;
+  --text-secondary: #a0aec0;
+  --text-tertiary: #718096;
+  --text-disabled: #4a5568;
+
+  /* 背景色系 */
+  --bg-primary: #141414;
+  --bg-secondary: #1f1f1f;
+  --bg-tertiary: #262626;
+  --bg-app: #1e293b;
+
+  /* 邊框色系 */
+  --border-color: #434343;
+  --border-light: #2f2f2f;
+  --border-dark: #595959;
+
+  /* 狀態色系 */
+  --color-success: #52c41a;
+  --color-warning: #faad14;
+  --color-error: #ff4d4f;
+  --color-info: #177ddc;
+
+  /* 陰影 */
+  --shadow-sm:
+    0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 6px rgba(0, 0, 0, 0.2),
+    0 1px 12px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 3px 6px rgba(0, 0, 0, 0.3), 0 6px 16px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.4);
+
+  /* 玻璃態效果 */
+  --glass-blur: blur(8px);
+  --glass-bg: rgba(15, 23, 42, 0.45);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+
+  /* 組件特定顏色 */
+  --avatar-light-bg: #52c41a;
+  --avatar-dark-bg: #177ddc;
+  --input-disabled-color: #434343;
+  --ai-avatar-bg: #262626;
+  --ai-avatar-icon-color: #a0aec0;
+  --chat-message-user-bg: #177ddc;
+  --chat-message-user-text: #ffffff;
+  --chat-message-ai-bg: rgba(255, 255, 255, 0.08);
+  --quick-option-border: #177ddc;
+  --quick-option-text: #177ddc;
+  --header-bg: #141414;
+  --header-text: #e2e8f0;
+  --header-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --surface-bg: #1d1d1d;
+
+  /* About 頁面特定顏色 */
+  --icon-info-color: #177ddc;
+  --icon-warning-color: #d48806;
+  --icon-error-color: #f5222d;
+  --icon-success-color: #52c41a;
+  --icon-primary-color: #177ddc;
+  --icon-tech-color: #85a5ff;
+  --icon-node-color: #52b788;
+  --icon-vue-color: #51de57;
+  --icon-vite-color: #b4b4f7;
+  --icon-linkedin-color: #0a66c2;
+  --icon-twitter-color: #1da1f2;
+  --icon-github-color: #f0f0f0;
+  --icon-code-color: #b37feb;
+  --card-contact-bg: #1f1f1f;
+  --stat-articles-color: #177ddc;
+  --stat-skills-color: #52c41a;
+  --stat-visitors-color: #f759ab;
+  --stat-heart-color: #f5222d;
+  --chart-total-color: #60a5fa;
+  --chart-tech-color: #10b981;
+  --chart-tags-color: #f59e0b;
+
+  /* StatisticsDashboard 特定顏色 */
+  --role-indicator-pm: #b37feb;
+  --role-indicator-sa: #177ddc;
+  --role-indicator-sd: #13c2c2;
+  --role-indicator-pg: #52c41a;
+  --role-indicator-ba: #d48806;
+  --role-text-color: #e2e8f0;
+  --tech-text-color: #177ddc;
+  --clickable-disabled-color: #434343;
+  --clickable-hover-bg: #111d2c;
+  --clickable-active-color: #52c41a;
+  --clickable-active-hover-bg: #162312;
+  --clickable-active-shadow: #274221;
+  --expand-level-bg: #3d2645;
+  --expand-job-bg: #1d3a1d;
+  --expand-title-color: #a0aec0;
+  --filter-tag-bg: #262626;
+
+  color-scheme: dark;
+}
+
+/* ===== 基礎樣式 ===== */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ===== 標題樣式 ===== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: var(--line-height-tight);
+}
+
+h1 {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-lg);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-md);
+}
+
+h4 {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+h5 {
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-sm);
+}
+
+h6 {
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ===== 段落和文本 ===== */
+
+p {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* ===== 代碼塊 ===== */
+
+code,
+pre {
+  font-family: var(--font-mono);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  color: var(--text-primary);
+}
+
+pre {
+  padding: var(--spacing-lg);
+  overflow-x: auto;
+}
+
+/* ===== 表單元素 ===== */
+
+input,
+textarea,
+select {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: var(--bg-secondary);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+/* ===== 按鈕 ===== */
+
+button {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== 列表 ===== */
+
+ul,
+ol {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+}
+
+li {
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ===== 表格 ===== */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-lg);
+}
+
+th,
+td {
+  padding: var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  background-color: var(--bg-secondary);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+tr:hover {
+  background-color: var(--bg-secondary);
+}
+
+/* ===== 分隔線 ===== */
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: var(--spacing-lg) 0;
+}
+
+/* ===== 工具類 ===== */
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.bg-primary {
+  background-color: var(--bg-primary);
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+.rounded {
+  border-radius: var(--radius-md);
+}
+
+.shadow {
+  box-shadow: var(--shadow-md);
+}
+
+.transition {
+  transition: all var(--transition-base);
+}

@@ -1,30 +1,29 @@
+/* CSS 變數已在 variables.css 中統一定義 */
+/* 此處保留原有的業務相關變數以保持向後相容 */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --app-bg: #f3f6fb;
-  --surface-bg: #ffffff;
-  --surface-muted: #f5f7fb;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #1677ff;
-  --accent-bg: rgba(22, 119, 255, 0.12);
-  --accent-border: rgba(22, 119, 255, 0.35);
+  /* 原有變數映射到新系統 */
+  --text: var(--text-primary);
+  --text-h: var(--text-primary);
+  --bg: var(--bg-primary);
+  --app-bg: var(--bg-app);
+  --surface-bg: var(--bg-primary);
+  --surface-muted: var(--bg-secondary);
+  --border: var(--border-color);
+  --code-bg: var(--bg-secondary);
+  --accent: var(--color-primary);
+  --accent-bg: var(--color-primary-light);
+  --accent-border: var(--border-color);
   --social-bg: rgba(244, 243, 236, 0.5);
-  --header-bg: #1677ff;
+  --header-bg: var(--color-primary);
   --header-text: #ffffff;
-  --header-shadow: 0 8px 24px rgba(22, 119, 255, 0.18);
-  --footer-bg: #eef3fb;
-  --footer-text: #67758a;
-  --surface-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --header-shadow: var(--shadow-md);
+  --footer-bg: var(--bg-secondary);
+  --footer-text: var(--text-secondary);
+  --surface-shadow: var(--shadow-lg);
+  --shadow: var(--shadow-md);
 
-  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
-  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
+  font: 18px/145% var(--font-sans);
   letter-spacing: 0.18px;
   color-scheme: light;
   color: var(--text);
@@ -40,30 +39,11 @@
 }
 
 :root[data-theme="dark"] {
-  --text: #e2e8f0;
-  --text-h: #f4f7fb;
-  --bg: rgba(55, 65, 81, 0.8);
-  --app-bg: #1e293b;
-  --surface-bg: #2d3748;
-  --surface-muted: #1a202c;
-  --border: #4a5568;
-  --code-bg: #1c2638;
-  --accent: #60a5fa;
-  --accent-bg: rgba(96, 165, 250, 0.18);
-  --accent-border: rgba(96, 165, 250, 0.45);
-  --social-bg: rgba(23, 32, 51, 0.75);
-  --header-bg: #0b1220;
-  --header-text: #f8fafc;
-  --header-shadow: 0 8px 24px rgba(2, 6, 23, 0.45);
-  --footer-bg: #0b1220;
-  --footer-text: #94a3b8;
-  --surface-shadow: 0 16px 40px rgba(2, 6, 23, 0.4);
-  --shadow:
-    rgba(41, 41, 41, 0.4) 0 10px 15px -3px,
-    rgba(90, 90, 90, 0.25) 0 4px 6px -2px;
+  /* 暗色模式變數自動由 variables.css 提供 */
   color-scheme: dark;
 }
 
+/* 暗色模式圖標效果 */
 :root[data-theme="dark"] #social .button-icon {
   filter: invert(1) brightness(2);
 }
@@ -201,7 +181,8 @@ code {
   padding: 0 50px;
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--header-shadow);
+  transition: all var(--transition-base);
 }
 
 #app :deep(.ant-layout-content) {
@@ -254,10 +235,6 @@ code {
 #app :deep(.ant-card-body) {
   background: var(--surface-bg);
   transition: background-color 0.3s;
-}
-
-:root[data-theme="dark"] #app :deep(.ant-card-body) {
-  background: rgba(255, 255, 255, 0.08);
 }
 
 #app :deep(.ant-tag) {

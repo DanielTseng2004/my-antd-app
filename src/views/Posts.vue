@@ -1,7 +1,9 @@
 <template>
   <div class="posts">
     <a-typography-title :level="2">
-      <unordered-list-outlined style="margin-right: 12px; color: #1890ff" />
+      <unordered-list-outlined
+        style="margin-right: 12px; color: var(--icon-info-color)"
+      />
       文章列表
     </a-typography-title>
 
@@ -30,7 +32,7 @@
             @search="onSearch"
           >
             <template #prefix>
-              <search-outlined style="color: #1890ff" />
+              <search-outlined style="color: var(--icon-info-color)" />
             </template>
           </a-input-search>
         </a-col>
@@ -65,7 +67,9 @@
             v-if="searchText || selectedCategory !== '全部'"
             :style="{ color: textColor }"
           >
-            <filter-outlined style="margin-right: 8px; color: #faad14" />
+            <filter-outlined
+              style="margin-right: 8px; color: var(--icon-warning-color)"
+            />
             找到 {{ filteredPosts.length }} 篇文章
             <a-button
               type="link"
@@ -115,16 +119,20 @@
         <a-list-item key="item.title">
           <template #actions>
             <span>
-              <calendar-outlined style="margin-right: 8px; color: #1890ff" />
+              <calendar-outlined
+                style="margin-right: 8px; color: var(--icon-info-color)"
+              />
               {{ item.date }}
             </span>
             <span>
-              <tag-outlined style="margin-right: 8px; color: #faad14" />
+              <tag-outlined
+                style="margin-right: 8px; color: var(--icon-warning-color)"
+              />
               <a-tag color="orange">{{ item.category }}</a-tag>
             </span>
             <span>
               <clock-circle-outlined
-                style="margin-right: 8px; color: #eb2f96"
+                style="margin-right: 8px; color: var(--stat-visitors-color)"
               />
               {{ item.readTime }}
             </span>

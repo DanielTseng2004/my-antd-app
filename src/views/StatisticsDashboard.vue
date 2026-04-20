@@ -358,28 +358,28 @@ const detailColumns = [
   border-radius: 2px;
 }
 .role-indicator.PM {
-  background: #722ed1;
+  background: var(--role-indicator-pm);
 }
 .role-indicator.SA {
-  background: #1890ff;
+  background: var(--role-indicator-sa);
 }
 .role-indicator.SD {
-  background: #13c2c2;
+  background: var(--role-indicator-sd);
 }
 .role-indicator.PG {
-  background: #52c41a;
+  background: var(--role-indicator-pg);
 }
 .role-indicator.BA {
-  background: #faad14;
+  background: var(--role-indicator-ba);
 }
 .role-text {
   font-weight: 600;
-  color: #333;
+  color: var(--role-text-color);
 }
 
 .tech-text {
   font-weight: bold;
-  color: #1890ff;
+  color: var(--tech-text-color);
 }
 
 /* 點擊與數值樣式 */
@@ -388,23 +388,23 @@ const detailColumns = [
   cursor: pointer;
   transition: 0.2s;
   border-radius: 4px;
-  color: #d9d9d9;
+  color: var(--clickable-disabled-color);
 }
 .clickable-count.has-value {
-  color: #1890ff;
+  color: var(--icon-info-color);
   font-weight: bold;
 }
 .clickable-count:hover {
-  background: #e6f7ff;
+  background: var(--clickable-hover-bg);
   text-decoration: underline;
 }
 .clickable-sub-count.active {
-  color: #52c41a;
+  color: var(--clickable-active-color);
   font-weight: bold;
 }
 .clickable-sub-count.active:hover {
-  background: #f6ffed;
-  box-shadow: 0 0 0 1px #b7eb8f;
+  background: var(--clickable-active-hover-bg);
+  box-shadow: 0 0 0 1px var(--clickable-active-shadow);
 }
 
 /* 展開容器 */
@@ -414,20 +414,20 @@ const detailColumns = [
   margin: -8px;
 }
 .level-bg {
-  background: #f9f0ff;
+  background: var(--expand-level-bg);
 }
 .job-bg {
-  background: #f6ffed;
+  background: var(--expand-job-bg);
 }
 .expand-title {
   margin-bottom: 8px;
   font-weight: bold;
   font-size: 13px;
-  color: #666;
+  color: var(--expand-title-color);
 }
 
 .filter-tag {
-  background: #eee;
+  background: var(--filter-tag-bg);
   padding: 4px 12px;
   border-radius: 4px;
   font-size: 12px;
