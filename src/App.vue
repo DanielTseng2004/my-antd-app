@@ -144,7 +144,10 @@
             <a-breadcrumb-item>首頁</a-breadcrumb-item>
             <a-breadcrumb-item>{{ route.name }}</a-breadcrumb-item>
           </a-breadcrumb>
-          <div class="content-shell">
+          <div
+            class="content-shell"
+            :style="{ padding: '24px', minHeight: '280px' }"
+          >
             <router-view />
           </div>
         </a-layout-content>

@@ -9,7 +9,7 @@
 
   <a-card
     v-if="open"
-    title="AI 智能助理"
+    title="AI 網站導遊"
     :bordered="false"
     class="chat-card"
   >
@@ -37,7 +37,6 @@
         >
           <template #icon><RobotOutlined /></template>
         </a-avatar>
-
         <div class="bubble">
           {{ msg.content }}
           <span
@@ -55,12 +54,9 @@
         <a-avatar
           :size="32"
           class="avatar"
-        >
-          <template #icon><RobotOutlined /></template>
-        </a-avatar>
-        <div class="bubble thinking">
-          <a-spin size="small" />
-        </div>
+          ><template #icon><RobotOutlined /></template
+        ></a-avatar>
+        <div class="bubble thinking"><a-spin size="small" /></div>
       </div>
 
       <div
@@ -80,21 +76,55 @@
 
     <template #actions>
       <div class="input-box">
+        <div
+          v-if="!showCustomInput"
+          class="guide-menu"
+        >
+          <a-divider style="margin: 4px 0 12px; font-size: 12px"
+            >想去哪裡逛逛？</a-divider
+          >
+          <a-space
+            wrap
+            style="justify-content: center; width: 100%"
+          >
+            <a-button
+              v-for="item in guideMenu"
+              :key="item.key"
+              size="small"
+              shape="round"
+              type="primary"
+              ghost
+              @click="handleOptionClick(item.label)"
+            >
+              {{ item.icon }} {{ item.label }}
+            </a-button>
+            <a-button
+              size="small"
+              shape="circle"
+              @click="showCustomInput = true"
+            >
+              <EditOutlined />
+            </a-button>
+          </a-space>
+        </div>
+
         <a-input
+          v-else
           v-model:value="userInput"
-          placeholder="輸入問題或點選上方標籤..."
+          placeholder="請輸入您的問題..."
           @pressEnter="handleSend"
           :disabled="isThinking || isTyping"
         >
+          <template #prefix>
+            <RollbackOutlined
+              @click="showCustomInput = false"
+              style="cursor: pointer; margin-right: 4px"
+            />
+          </template>
           <template #suffix>
             <SendOutlined
               @click="handleSend"
-              :style="{
-                color: userInput.trim()
-                  ? 'var(--color-primary)'
-                  : 'var(--input-disabled-color)',
-                cursor: 'pointer',
-              }"
+              :style="sendIconStyle"
             />
           </template>
         </a-input>
@@ -105,135 +135,182 @@
 
 <script setup>
 import { ref, nextTick, computed } from "vue";
+import { useRouter } from "vue-router";
+import { message as antMessage } from "ant-design-vue";
 import {
   MessageOutlined,
   RobotOutlined,
   SendOutlined,
   CloseOutlined,
+  EditOutlined,
+  RollbackOutlined,
 } from "@ant-design/icons-vue";
 
-// 1. 配置：模擬資料庫（含回覆與推薦選項）
-const MOCK_DB = {
-  系統介紹: {
-    ans: "本系統提供個人部落格管理、人才查詢與統計數據展示，並支援深色模式切換。",
-    options: ["功能亮點", "如何聯繫你？"],
-  },
-  功能亮點: {
-    ans: "亮點包含：Ant Design Vue 精美組件、Vite 極速開發體驗、以及現在您看到的模擬 AI 助理！",
-    options: ["價格方案", "系統介紹"],
-  },
-  價格方案: {
-    ans: "這套系統目前為專案展示使用，完全免費！如果您需要商業授權，歡迎來信洽詢。",
-    options: ["如何聯繫你？", "系統介紹"],
-  },
-  "如何聯繫你？": {
-    ans: "您可以寄信至 support@manus.admin，或是在 GitHub 上給我們一個 Star！",
-    options: ["系統介紹"],
-  },
-  default: {
-    ans: "感謝您的提議！這超出了我的模擬範圍。您可以試試點擊下方的常用快捷鍵：",
-    options: ["系統介紹", "功能亮點", "價格方案"],
-  },
-};
-
+const router = useRouter();
 const open = ref(false);
 const userInput = ref("");
 const isThinking = ref(false);
 const isTyping = ref(false);
+const showCustomInput = ref(false);
 const scrollBox = ref(null);
 
-// 初始化訊息
+// 1. 導覽選單定義
+const guideMenu = [
+  { key: "home", label: "返回首頁", icon: "🏠" },
+  { key: "posts", label: "技術文章", icon: "📚" },
+  { key: "stats", label: "數據看板", icon: "📊" },
+  { key: "form", label: "人才資料", icon: "📝" },
+  { key: "about", label: "關於作者", icon: "👤" },
+];
+
+// 2. 知識庫對接路由表 (對應您 index.js 的路徑)
+const MOCK_DB = {
+  返回首頁: {
+    ans: "沒問題，這就帶您回到首頁看最新動態！",
+    options: ["技術文章", "關於作者"],
+    path: "/",
+  },
+  技術文章: {
+    ans: "這裡是作者的技術累積，包含 Vue 3 與 Vite 的實戰心得。正在跳轉...",
+    options: ["最新文章", "返回首頁"],
+    path: "/posts",
+  },
+  數據看板: {
+    ans: "正在為您載入數據視覺化看板，請稍候...",
+    options: ["人才資料", "返回首頁"],
+    path: "/staticdashboard",
+  },
+  人才資料: {
+    ans: "正在前往人才資料管理頁面...",
+    options: ["數據看板", "返回首頁"],
+    path: "/form",
+  },
+  關於作者: {
+    ans: "想認識 Manus 嗎？這就帶您去個人簡介頁面。",
+    options: ["技術棧", "聯絡方式"],
+    path: "/about",
+  },
+  系統設定: {
+    ans: "正在進入系統偏好設置...",
+    options: ["返回首頁"],
+    path: "/systemsettings",
+  },
+  default: {
+    ans: "抱歉，這超出了導覽範圍。您可以點選下方選單前往主要景點！",
+    options: ["返回首頁", "技術文章", "關於作者"],
+  },
+};
+
 const messages = ref([
   {
     role: "ai",
-    content: "您好！我是您的專屬助理，請問有什麼我可以幫您的？",
+    content:
+      "您好！我是網站導遊。您可以點擊下方選單，我會直接帶您去想看的頁面！",
     isTyping: false,
   },
 ]);
 
-// 動態判斷當前要顯示哪些選項按鈕
+// 3. 核心處理邏輯
+const handleSend = async (manualInput = null) => {
+  const text = typeof manualInput === "string" ? manualInput : userInput.value;
+  if (!text.trim() || isThinking.value || isTyping.value) return;
+
+  messages.value.push({ role: "user", content: text });
+  userInput.value = "";
+  scrollToBottom();
+
+  isThinking.value = true;
+
+  setTimeout(async () => {
+    isThinking.value = false;
+    const matchKey = Object.keys(MOCK_DB).find((k) => text.includes(k));
+    const result = matchKey ? MOCK_DB[matchKey] : MOCK_DB.default;
+
+    await typeWrite(result.ans);
+
+    // 執行路由跳轉
+    if (result.path) {
+      setTimeout(() => {
+        router.push(result.path);
+        antMessage.info(`導遊帶路：已到達 ${text}`);
+      }, 500);
+    }
+  }, 600);
+};
+
+// 打字效果與滾動 (略，同之前邏輯)
+const typeWrite = async (text) => {
+  isTyping.value = true;
+  const newMsg = { role: "ai", content: "", isTyping: true };
+  messages.value.push(newMsg);
+  const targetMsg = messages.value[messages.value.length - 1];
+  let currentText = "";
+  for (let i = 0; i < text.length; i++) {
+    currentText += text.charAt(i);
+    targetMsg.content = currentText;
+    if (i % 3 === 0) await scrollToBottom();
+    await new Promise((resolve) => setTimeout(resolve, 30));
+  }
+  targetMsg.isTyping = false;
+  isTyping.value = false;
+  await scrollToBottom();
+};
+
+const scrollToBottom = async () => {
+  await nextTick();
+  if (scrollBox.value) scrollBox.value.scrollTop = scrollBox.value.scrollHeight;
+};
+
+const handleOptionClick = (opt) => handleSend(opt);
+
 const currentOptions = computed(() => {
-  // 取得最後一則 AI 訊息
   const lastAiMsg = [...messages.value]
     .reverse()
     .find((m) => m.role === "ai" && !m.isTyping);
-  if (!lastAiMsg) return MOCK_DB.default.options;
-
-  // 根據 AI 回覆內容找到對應的選項，找不到就給 default
+  if (!lastAiMsg) return ["返回首頁", "技術文章"];
   const match = Object.values(MOCK_DB).find(
     (item) => item.ans === lastAiMsg.content,
   );
   return match ? match.options : MOCK_DB.default.options;
 });
 
-// 自動滾動到底部
-const scrollToBottom = async () => {
-  await nextTick();
-  if (scrollBox.value) {
-    scrollBox.value.scrollTop = scrollBox.value.scrollHeight;
-  }
-};
-
-// 模擬打字效果
-const typeWrite = async (text) => {
-  if (!text) return;
-
-  isTyping.value = true;
-  const newMsg = { role: "ai", content: "", isTyping: true };
-  messages.value.push(newMsg);
-
-  // 取得該訊息的引用
-  const targetMsg = messages.value[messages.value.length - 1];
-
-  let currentText = "";
-  const speed = 40; // 每個字的毫秒數
-
-  for (let i = 0; i < text.length; i++) {
-    currentText += text.charAt(i);
-    targetMsg.content = currentText; // 觸發 Vue 響應式更新
-
-    // 性能優化：每 3 個字才觸發一次滾動計算，減少 Reflow 次數
-    if (i % 3 === 0) {
-      await scrollToBottom();
-    }
-
-    await new Promise((resolve) => setTimeout(resolve, speed));
-  }
-
-  targetMsg.isTyping = false;
-  isTyping.value = false;
-  await scrollToBottom(); // 最後確認滾動到底部
-};
-
-// 發送訊息邏輯
-const handleSend = async (manualInput = null) => {
-  const text = typeof manualInput === "string" ? manualInput : userInput.value;
-  if (!text.trim() || isThinking.value || isTyping.value) return;
-
-  // 使用者訊息
-  messages.value.push({ role: "user", content: text });
-  userInput.value = "";
-  scrollToBottom();
-
-  // 模擬思考中
-  isThinking.value = true;
-
-  setTimeout(async () => {
-    isThinking.value = false;
-    // 關鍵字比對
-    const matchKey = Object.keys(MOCK_DB).find((k) => text.includes(k));
-    const result = matchKey ? MOCK_DB[matchKey] : MOCK_DB.default;
-    await typeWrite(result.ans);
-  }, 800);
-};
-
-// 點擊快捷標籤
-const handleOptionClick = (opt) => {
-  handleSend(opt);
-};
+const sendIconStyle = computed(() => ({
+  color: userInput.value.trim()
+    ? "var(--color-primary)"
+    : "var(--input-disabled-color)",
+  cursor: "pointer",
+}));
 </script>
 
 <style scoped>
+.guide-menu {
+  padding: 8px;
+  background: var(--bg-primary);
+  border-radius: 8px;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.quick-opt {
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quick-opt:hover {
+  background: var(--color-primary);
+  color: white;
+}
 /* 聊天視窗主體 */
 .chat-card {
   position: fixed;
