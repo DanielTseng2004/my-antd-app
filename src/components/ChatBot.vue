@@ -7,135 +7,141 @@
     <template #icon><MessageOutlined /></template>
   </a-float-button>
 
-  <a-card
-    v-if="open"
-    title="AI 網站導遊"
-    :bordered="false"
-    class="chat-card"
-  >
-    <template #extra>
-      <a
-        @click="open = false"
-        class="close-btn"
-        ><CloseOutlined
-      /></a>
-    </template>
-
-    <div
-      class="message-container"
-      ref="scrollBox"
+  <transition name="fade">
+    <a-card
+      v-if="open"
+      title="AI 網站導遊"
+      :bordered="false"
+      class="chat-card"
     >
-      <div
-        v-for="(msg, index) in messages"
-        :key="index"
-        :class="['msg-wrapper', msg.role]"
-      >
-        <a-avatar
-          v-if="msg.role === 'ai'"
-          :size="32"
-          class="avatar"
+      <template #extra>
+        <a
+          @click="open = false"
+          class="close-btn"
         >
-          <template #icon><RobotOutlined /></template>
-        </a-avatar>
-        <div class="bubble">
-          {{ msg.content }}
-          <span
-            v-if="msg.isTyping"
-            class="cursor"
-            >|</span
-          >
-        </div>
-      </div>
+          <CloseOutlined />
+        </a>
+      </template>
 
       <div
-        v-if="isThinking"
-        class="msg-wrapper ai"
+        class="message-container"
+        ref="scrollBox"
       >
-        <a-avatar
-          :size="32"
-          class="avatar"
-          ><template #icon><RobotOutlined /></template
-        ></a-avatar>
-        <div class="bubble thinking"><a-spin size="small" /></div>
-      </div>
-
-      <div
-        v-if="!isThinking && !isTyping"
-        class="options-area"
-      >
-        <a-tag
-          v-for="opt in currentOptions"
-          :key="opt"
-          class="quick-opt"
-          @click="handleOptionClick(opt)"
-        >
-          {{ opt }}
-        </a-tag>
-      </div>
-    </div>
-
-    <template #actions>
-      <div class="input-box">
         <div
-          v-if="!showCustomInput"
-          class="guide-menu"
+          v-for="(msg, index) in messages"
+          :key="index"
+          :class="['msg-wrapper', msg.role]"
         >
-          <a-divider style="margin: 4px 0 12px; font-size: 12px"
-            >想去哪裡逛逛？</a-divider
+          <a-avatar
+            v-if="msg.role === 'ai'"
+            :size="40"
+            class="avatar"
           >
-          <a-space
-            wrap
-            style="justify-content: center; width: 100%"
-          >
-            <a-button
-              v-for="item in guideMenu"
-              :key="item.key"
-              size="small"
-              shape="round"
-              type="primary"
-              ghost
-              @click="handleOptionClick(item.label)"
+            <template #icon><RobotOutlined /></template>
+          </a-avatar>
+
+          <div class="bubble">
+            {{ msg.content }}
+            <span
+              v-if="msg.isTyping"
+              class="cursor"
+              >|</span
             >
-              {{ item.icon }} {{ item.label }}
-            </a-button>
-            <a-button
-              size="small"
-              shape="circle"
-              @click="showCustomInput = true"
-            >
-              <EditOutlined />
-            </a-button>
-          </a-space>
+          </div>
         </div>
 
-        <a-input
-          v-else
-          v-model:value="userInput"
-          placeholder="請輸入您的問題..."
-          @pressEnter="handleSend"
-          :disabled="isThinking || isTyping"
+        <div
+          v-if="isThinking"
+          class="msg-wrapper ai"
         >
-          <template #prefix>
-            <RollbackOutlined
-              @click="showCustomInput = false"
-              style="cursor: pointer; margin-right: 4px"
-            />
-          </template>
-          <template #suffix>
-            <SendOutlined
-              @click="handleSend"
-              :style="sendIconStyle"
-            />
-          </template>
-        </a-input>
+          <a-avatar
+            :size="40"
+            class="avatar"
+          >
+            <template #icon><RobotOutlined /></template>
+          </a-avatar>
+          <div class="bubble thinking"><a-spin size="small" /></div>
+        </div>
+
+        <div
+          v-if="!isThinking && !isTyping"
+          class="options-area"
+        >
+          <a-tag
+            v-for="opt in currentOptions"
+            :key="opt"
+            class="quick-opt"
+            @click="handleOptionClick(opt)"
+          >
+            {{ opt }}
+          </a-tag>
+        </div>
       </div>
-    </template>
-  </a-card>
+
+      <template #actions>
+        <div class="input-box">
+          <div
+            v-if="!showCustomInput"
+            class="guide-menu"
+          >
+            <a-divider style="margin: 4px 0 12px; font-size: 12px"
+              >想去哪裡逛逛？</a-divider
+            >
+            <a-space
+              wrap
+              style="justify-content: center; width: 100%"
+            >
+              <a-button
+                v-for="item in guideMenu"
+                :key="item.key"
+                size="small"
+                shape="round"
+                type="primary"
+                ghost
+                @click="handleOptionClick(item.label)"
+              >
+                {{ item.icon }} {{ item.label }}
+              </a-button>
+              <a-button
+                size="small"
+                shape="circle"
+                @click="showCustomInput = true"
+              >
+                <EditOutlined />
+              </a-button>
+            </a-space>
+          </div>
+
+          <a-input
+            v-else
+            v-model:value="userInput"
+            placeholder="請輸入您的問題..."
+            @pressEnter="handleSend"
+            :disabled="isThinking || isTyping"
+          >
+            <template #prefix>
+              <RollbackOutlined
+                @click="showCustomInput = false"
+                style="cursor: pointer; margin-right: 4px"
+              />
+            </template>
+            <template #suffix>
+              <SendOutlined
+                @click="handleSend"
+                :style="sendIconStyle"
+              />
+            </template>
+          </a-input>
+        </div>
+      </template>
+    </a-card>
+  </transition>
 </template>
 
 <script setup>
-import { ref, nextTick, computed } from "vue";
+import { ref, nextTick, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { MOCK_DB } from "../data/botResponses";
 import { message as antMessage } from "ant-design-vue";
 import {
   MessageOutlined,
@@ -154,52 +160,13 @@ const isTyping = ref(false);
 const showCustomInput = ref(false);
 const scrollBox = ref(null);
 
-// 1. 導覽選單定義
+// 1. 導覽快捷鍵
 const guideMenu = [
   { key: "home", label: "返回首頁", icon: "🏠" },
   { key: "posts", label: "技術文章", icon: "📚" },
   { key: "stats", label: "數據看板", icon: "📊" },
-  { key: "form", label: "人才資料", icon: "📝" },
   { key: "about", label: "關於作者", icon: "👤" },
 ];
-
-// 2. 知識庫對接路由表 (對應您 index.js 的路徑)
-const MOCK_DB = {
-  返回首頁: {
-    ans: "沒問題，這就帶您回到首頁看最新動態！",
-    options: ["技術文章", "關於作者"],
-    path: "/",
-  },
-  技術文章: {
-    ans: "這裡是作者的技術累積，包含 Vue 3 與 Vite 的實戰心得。正在跳轉...",
-    options: ["最新文章", "返回首頁"],
-    path: "/posts",
-  },
-  數據看板: {
-    ans: "正在為您載入數據視覺化看板，請稍候...",
-    options: ["人才資料", "返回首頁"],
-    path: "/staticdashboard",
-  },
-  人才資料: {
-    ans: "正在前往人才資料管理頁面...",
-    options: ["數據看板", "返回首頁"],
-    path: "/form",
-  },
-  關於作者: {
-    ans: "想認識 Manus 嗎？這就帶您去個人簡介頁面。",
-    options: ["技術棧", "聯絡方式"],
-    path: "/about",
-  },
-  系統設定: {
-    ans: "正在進入系統偏好設置...",
-    options: ["返回首頁"],
-    path: "/systemsettings",
-  },
-  default: {
-    ans: "抱歉，這超出了導覽範圍。您可以點選下方選單前往主要景點！",
-    options: ["返回首頁", "技術文章", "關於作者"],
-  },
-};
 
 const messages = ref([
   {
@@ -215,42 +182,46 @@ const handleSend = async (manualInput = null) => {
   const text = typeof manualInput === "string" ? manualInput : userInput.value;
   if (!text.trim() || isThinking.value || isTyping.value) return;
 
+  // 使用者訊息
   messages.value.push({ role: "user", content: text });
   userInput.value = "";
   scrollToBottom();
 
   isThinking.value = true;
 
+  // 模擬思考延遲
   setTimeout(async () => {
     isThinking.value = false;
+
+    // 關鍵字匹配邏輯
     const matchKey = Object.keys(MOCK_DB).find((k) => text.includes(k));
     const result = matchKey ? MOCK_DB[matchKey] : MOCK_DB.default;
 
     await typeWrite(result.ans);
 
-    // 執行路由跳轉
+    // 路由跳轉處理
     if (result.path) {
       setTimeout(() => {
         router.push(result.path);
-        antMessage.info(`導遊帶路：已到達 ${text}`);
+        antMessage.success(`已導航至：${matchKey || "目標頁面"}`);
       }, 500);
     }
-  }, 600);
+  }, 800);
 };
 
-// 打字效果與滾動 (略，同之前邏輯)
+// 打字機特效
 const typeWrite = async (text) => {
   isTyping.value = true;
   const newMsg = { role: "ai", content: "", isTyping: true };
   messages.value.push(newMsg);
   const targetMsg = messages.value[messages.value.length - 1];
-  let currentText = "";
+
   for (let i = 0; i < text.length; i++) {
-    currentText += text.charAt(i);
-    targetMsg.content = currentText;
+    targetMsg.content += text.charAt(i);
     if (i % 3 === 0) await scrollToBottom();
-    await new Promise((resolve) => setTimeout(resolve, 30));
+    await new Promise((resolve) => setTimeout(resolve, 40));
   }
+
   targetMsg.isTyping = false;
   isTyping.value = false;
   await scrollToBottom();
@@ -258,16 +229,24 @@ const typeWrite = async (text) => {
 
 const scrollToBottom = async () => {
   await nextTick();
-  if (scrollBox.value) scrollBox.value.scrollTop = scrollBox.value.scrollHeight;
+  if (scrollBox.value) {
+    scrollBox.value.scrollTo({
+      top: scrollBox.value.scrollHeight,
+      behavior: "smooth",
+    });
+  }
 };
 
 const handleOptionClick = (opt) => handleSend(opt);
 
+// 計算當前推薦選項
 const currentOptions = computed(() => {
   const lastAiMsg = [...messages.value]
     .reverse()
     .find((m) => m.role === "ai" && !m.isTyping);
+
   if (!lastAiMsg) return ["返回首頁", "技術文章"];
+
   const match = Object.values(MOCK_DB).find(
     (item) => item.ans === lastAiMsg.content,
   );
@@ -275,96 +254,59 @@ const currentOptions = computed(() => {
 });
 
 const sendIconStyle = computed(() => ({
-  color: userInput.value.trim()
-    ? "var(--color-primary)"
-    : "var(--input-disabled-color)",
+  color: userInput.value.trim() ? "#1890ff" : "#d9d9d9",
   cursor: "pointer",
 }));
 </script>
 
 <style scoped>
-.guide-menu {
-  padding: 8px;
-  background: var(--bg-primary);
-  border-radius: 8px;
-  animation: slideUp 0.3s ease-out;
+/* 視窗進場動畫 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.quick-opt {
-  margin-bottom: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.quick-opt:hover {
-  background: var(--color-primary);
-  color: white;
-}
-/* 聊天視窗主體 */
 .chat-card {
   position: fixed;
   right: 24px;
   bottom: 100px;
-  width: 400px;
-  height: 600px;
+  width: 380px;
+  height: 550px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
-  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
   z-index: 1001;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  background: var(--surface-bg);
-}
-/* 修改頭像尺寸與對齊 */
-.avatar {
-  width: 40px !important; /* 從 32px 加大到 40px */
-  height: 40px !important;
-  min-width: 40px; /* 防止 flex 擠壓 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--ai-avatar-bg);
+  background: #fff;
 }
 
-/* 讓內部的機器人圖示也跟著變大 */
-.avatar :deep(.anticon) {
-  font-size: 20px; /* 加大圖示本體 */
-  color: var(--ai-avatar-icon-color);
-}
-
-/* 修正訊息包裹器，確保頭像跟氣泡頂部對齊 */
-.msg-wrapper.ai {
-  align-self: flex-start;
-  align-items: flex-start; /* 確保對齊頂部 */
-  margin-bottom: 4px; /* 增加一點下方間距防止太擠 */
-}
-/* 訊息區域 */
-.message-container {
-  height: 380px;
-  overflow-y: auto;
-  padding: 16px;
+:deep(.ant-card-body) {
+  flex: 1;
+  padding: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  background-color: var(--surface-bg);
 }
 
-/* 訊息包裹器 */
+.message-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background-color: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .msg-wrapper {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   max-width: 85%;
 }
 
@@ -377,77 +319,68 @@ const sendIconStyle = computed(() => ({
   align-self: flex-start;
 }
 
-/* 對話氣泡 */
 .bubble {
-  font-size: medium;
-  font-weight: bold;
   padding: 10px 14px;
-  border-radius: 15px;
+  border-radius: 12px;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
   word-break: break-all;
-  color: var(--text);
 }
 
 .user .bubble {
-  background: var(--chat-message-user-bg);
-  color: var(--chat-message-user-text);
+  background: #1890ff;
+  color: #fff;
   border-bottom-right-radius: 2px;
 }
 
 .ai .bubble {
-  background: var(--chat-message-ai-bg);
-  color: var(--text-primary);
+  background: #fff;
+  color: #333;
   border-bottom-left-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* 選項按鈕區域 */
+.avatar {
+  background: #e6f7ff;
+  color: #1890ff;
+  flex-shrink: 0;
+}
+
 .options-area {
-  padding-left: 40px;
+  padding-left: 50px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: -8px;
-  margin-bottom: 8px;
+  gap: 6px;
 }
 
 .quick-opt {
   cursor: pointer;
-  border-radius: 20px;
-  padding: 4px 12px;
-  background: var(--surface-bg);
-  border: 1px solid var(--quick-option-border);
-  color: var(--quick-option-text);
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
   transition: all 0.3s;
-  user-select: none;
 }
 
 .quick-opt:hover {
-  background: var(--quick-option-border);
-  color: #fff;
+  border-color: #1890ff;
+  color: #1890ff;
 }
 
-/* 其他小組件樣式 */
 .thinking {
-  display: flex;
-  align-items: center;
   background: transparent !important;
   box-shadow: none !important;
 }
 
 .input-box {
-  padding: 8px 12px;
+  padding: 12px;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
 }
 
 .cursor {
   animation: blink 1s infinite;
-  font-weight: bold;
-  color: var(--color-primary);
-}
-
-.close-btn:hover {
-  color: var(--color-error);
+  color: #1890ff;
+  margin-left: 2px;
 }
 
 @keyframes blink {
@@ -456,45 +389,12 @@ const sendIconStyle = computed(() => ({
   }
 }
 
-/* 滾動條樣式優化 */
+/* 自定義捲軸 */
 .message-container::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
 }
 .message-container::-webkit-scrollbar-thumb {
-  background: var(--border-color);
+  background: #e8e8e8;
   border-radius: 10px;
-}
-
-:deep(:root[data-theme="dark"]) .chat-card {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.16);
-  color: var(--text);
-}
-
-:deep(:root[data-theme="dark"]) .message-container {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-
-:deep(:root[data-theme="dark"]) .ai .bubble {
-  background: rgba(255, 255, 255, 0.18);
-  color: var(--text);
-}
-
-:deep(:root[data-theme="dark"]) .avatar {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-:deep(:root[data-theme="dark"]) .quick-opt {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.18);
-  color: var(--text);
-}
-
-:deep(:root[data-theme="dark"]) .message-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-:deep(:root[data-theme="dark"]) .message-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
 }
 </style>
