@@ -48,6 +48,14 @@
             <template #icon><SettingOutlined /></template>
             <router-link to="/systemsettings">系統設定</router-link>
           </a-menu-item>
+          <a-menu-item key="ProjectTimeline">
+            <template #icon><HistoryOutlined /></template>
+            <router-link to="/timeline">專案時間軸</router-link>
+          </a-menu-item>
+          <a-menu-item key="InteractiveLab">
+            <template #icon><ExperimentOutlined /></template>
+            <router-link to="/interactive-lab">互動實驗室</router-link>
+          </a-menu-item>
         </a-menu>
       </a-layout-sider>
 
@@ -180,6 +188,8 @@ import {
   PieChartOutlined,
   BulbOutlined,
   BulbFilled,
+  HistoryOutlined,
+  ExperimentOutlined,
 } from "@ant-design/icons-vue";
 import { useTheme } from "./composables/useTheme";
 

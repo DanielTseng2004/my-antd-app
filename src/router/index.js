@@ -6,6 +6,8 @@ import About from "../views/About.vue";
 import FormView from "../views/FormView.vue";
 import StatisticsDashboard from "../views/StatisticsDashboard.vue";
 import SystemSettings from "../views/SystemSettings.vue";
+import ProjectTimeline from "../views/ProjectTimeline.vue";
+import InteractiveLab from "../views/InteractiveLab.vue";
 const routes = [
   {
     path: "/",
@@ -42,6 +44,16 @@ const routes = [
     path: "/systemsettings",
     name: "SystemSettings",
     component: SystemSettings,
+  },
+  {
+    path: "/timeline",
+    name: "ProjectTimeline",
+    component: ProjectTimeline,
+  },
+  {
+    path: "/interactive-lab",
+    name: "InteractiveLab",
+    component: InteractiveLab,
   },
 ];
 
