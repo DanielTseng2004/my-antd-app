@@ -31,7 +31,6 @@
               <router-link to="/about">關於作者</router-link>
             </a-menu-item>
           </a-sub-menu>
-
           <a-sub-menu key="sub2">
             <template #icon><AppstoreOutlined /></template>
             <template #title>表單管理</template>
@@ -54,7 +53,11 @@
           </a-menu-item>
           <a-menu-item key="InteractiveLab">
             <template #icon><ExperimentOutlined /></template>
-            <router-link to="/interactive-lab">互動實驗室</router-link>
+            <router-link to="/interactiveLab">互動實驗室</router-link>
+          </a-menu-item>
+          <a-menu-item key="dependencyMonitor">
+            <template #icon><FileSearchOutlined /></template>
+            <router-link to="/dependencyMonitor">依賴監控</router-link>
           </a-menu-item>
         </a-menu>
       </a-layout-sider>

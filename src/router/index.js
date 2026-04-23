@@ -8,6 +8,7 @@ import StatisticsDashboard from "../views/StatisticsDashboard.vue";
 import SystemSettings from "../views/SystemSettings.vue";
 import ProjectTimeline from "../views/ProjectTimeline.vue";
 import InteractiveLab from "../views/InteractiveLab.vue";
+import DependencyMonitor from "../views/DependencyMonitor.vue";
 const routes = [
   {
     path: "/",
@@ -51,9 +52,14 @@ const routes = [
     component: ProjectTimeline,
   },
   {
-    path: "/interactive-lab",
+    path: "/interactiveLab",
     name: "InteractiveLab",
     component: InteractiveLab,
+  },
+  {
+    path: "/dependencymonitor",
+    name: "DependencyMonitor",
+    component: DependencyMonitor,
   },
 ];
 
