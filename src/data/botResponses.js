@@ -8,22 +8,22 @@ export const MOCK_DB = {
   技術文章: {
     ans: "這裡記錄了我對 Vue 3、Vite 以及前端架構的實戰心得，希望能對您有所幫助！",
     options: ["數據看板", "返回首頁"],
-    path: "/posts",
+    path: "/blog/posts",
   },
   數據看板: {
     ans: "正在載入即時數據圖表。這裡使用了 ECharts 進行視覺化展示，請稍候...",
     options: ["人才資料", "返回首頁"],
-    path: "/staticdashboard",
+    path: "/data/statistics",
   },
   人才資料: {
     ans: "已進入人才資料庫。您可以在此進行增刪查改的權限測試。",
     options: ["數據看板", "關於作者"],
-    path: "/form",
+    path: "/data/form",
   },
   關於作者: {
     ans: "Manus 是一位熱衷於前端技術的開發者。想了解他的技能樹或聯絡方式嗎？",
     options: ["技能棧", "聯絡方式", "返回首頁"],
-    path: "/about",
+    path: "/blog/about",
   },
 
   // --- 基礎問候類 ---

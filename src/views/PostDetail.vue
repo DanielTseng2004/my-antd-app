@@ -11,7 +11,7 @@
         ></a-breadcrumb-item
       >
       <a-breadcrumb-item
-        ><router-link to="/posts">文章列表</router-link></a-breadcrumb-item
+        ><router-link to="/blog/posts">文章列表</router-link></a-breadcrumb-item
       >
       <a-breadcrumb-item>{{ post.title }}</a-breadcrumb-item>
     </a-breadcrumb>
@@ -162,7 +162,7 @@
     >
       <a-button
         size="large"
-        @click="$router.push('/posts')"
+        @click="$router.push('/blog/posts')"
         shape="round"
       >
         <arrow-left-outlined style="margin-right: 4px" />
@@ -171,7 +171,7 @@
       <a-button
         type="primary"
         size="large"
-        @click="$router.push('/')"
+        @click="$router.push('/blog/home')"
         shape="round"
       >
         <home-outlined style="margin-right: 4px" />
@@ -239,7 +239,7 @@
       <template #extra>
         <a-button
           type="primary"
-          @click="$router.push('/posts')"
+          @click="$router.push('/blog/posts')"
         >
           <file-text-outlined style="margin-right: 4px" />
           返回文章列表

@@ -193,7 +193,7 @@
           <a-list-item-meta :description="item.summary">
             <template #title>
               <router-link
-                :to="'/posts/' + item.id"
+                :to="'/blog/posts/' + item.id"
                 style="font-size: 1.2rem; font-weight: bold"
               >
                 {{ item.title }}
@@ -217,7 +217,7 @@
       <a-button
         type="primary"
         size="large"
-        @click="$router.push('/posts')"
+        @click="$router.push('/blog/posts')"
         shape="round"
       >
         <arrow-right-outlined style="margin-right: 8px" />
@@ -323,12 +323,12 @@ const quickActions = computed(() => [
   {
     title: "瀏覽所有文章",
     description: "快速進入文章列表查看所有內容。",
-    action: () => router.push("/posts"),
+    action: () => router.push("/blog/posts"),
   },
   {
     title: "查看關於我",
     description: "前往 About 頁面看更多個人資訊與聯絡方式。",
-    action: () => router.push("/about"),
+    action: () => router.push("/blog/about"),
   },
   {
     title: "閱讀最新文章",

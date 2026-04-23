@@ -1,71 +1,117 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import Posts from "../views/Posts.vue";
-import PostDetail from "../views/PostDetail.vue";
-import About from "../views/About.vue";
-import FormView from "../views/FormView.vue";
-import StatisticsDashboard from "../views/StatisticsDashboard.vue";
-import SystemSettings from "../views/SystemSettings.vue";
-import ProjectTimeline from "../views/ProjectTimeline.vue";
-import InteractiveLab from "../views/InteractiveLab.vue";
-import DependencyMonitor from "../views/DependencyMonitor.vue";
+
 const routes = [
+  // --- 1. 個人部落格維度 (加上 /blog 前綴) ---
+  {
+    path: "/blog",
+    name: "BlogBase",
+    redirect: "/blog/home",
+    children: [
+      {
+        path: "home",
+        name: "Home",
+        component: () => import("../views/Home.vue"),
+      },
+      {
+        path: "posts",
+        name: "Posts",
+        component: () => import("../views/Posts.vue"),
+      },
+      {
+        path: "posts/:id",
+        name: "PostDetail",
+        component: () => import("../views/PostDetail.vue"),
+        props: true,
+      },
+      {
+        path: "about",
+        name: "About",
+        component: () => import("../views/About.vue"),
+      },
+    ],
+  },
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    redirect: "/blog/home",
   },
   {
     path: "/posts",
-    name: "Posts",
-    component: Posts,
-  },
-  {
-    path: "/posts/:id",
-    name: "PostDetail",
-    component: PostDetail,
-    props: true,
+    redirect: "/blog/posts",
   },
   {
     path: "/about",
-    name: "About",
-    component: About,
+    redirect: "/blog/about",
+  },
+
+  // --- 2. 數據管理維度 ---
+  {
+    path: "/data",
+    name: "DataManagement",
+    redirect: "/data/form",
+    children: [
+      {
+        path: "form",
+        name: "Form",
+        component: () => import("../views/FormView.vue"),
+      },
+      {
+        path: "statistics",
+        name: "Statistics",
+        component: () => import("../views/StatisticsDashboard.vue"),
+      },
+    ],
   },
   {
     path: "/form",
-    name: "Form",
-    component: FormView,
+    redirect: "/data/form",
   },
   {
     path: "/staticdashboard",
-    name: "StaticDashboard",
-    component: StatisticsDashboard,
+    redirect: "/data/statistics",
+  },
+
+  // --- 3. 知識管理維度 ---
+  {
+    path: "/knowledge",
+    name: "KnowledgeBase",
+    redirect: "/knowledge/timeline",
+    children: [
+      {
+        path: "timeline",
+        name: "ProjectTimeline",
+        component: () => import("../views/ProjectTimeline.vue"),
+      },
+    ],
+  },
+  {
+    path: "/knowledge/wiki",
+    redirect: "/knowledge/timeline",
+  },
+
+  // --- 4. 系統與實驗室 ---
+  {
+    path: "/interactiveLab",
+    name: "InteractiveLab",
+    component: () => import("../views/InteractiveLab.vue"),
+  },
+  {
+    path: "/dependencyMonitor",
+    name: "DependencyMonitor",
+    component: () => import("../views/DependencyMonitor.vue"),
   },
   {
     path: "/systemsettings",
     name: "SystemSettings",
-    component: SystemSettings,
-  },
-  {
-    path: "/timeline",
-    name: "ProjectTimeline",
-    component: ProjectTimeline,
-  },
-  {
-    path: "/interactiveLab",
-    name: "InteractiveLab",
-    component: InteractiveLab,
-  },
-  {
-    path: "/dependencymonitor",
-    name: "DependencyMonitor",
-    component: DependencyMonitor,
+    component: () => import("../views/SystemSettings.vue"),
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior() {
+    return { top: 0 };
+  },
 });
 
 export default router;

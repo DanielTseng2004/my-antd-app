@@ -339,7 +339,7 @@
         <a-button
           type="primary"
           size="large"
-          @click="$router.push('/posts')"
+          @click="$router.push('/blog/posts')"
           shape="round"
         >
           <file-text-outlined style="margin-right: 4px" />

@@ -10,47 +10,43 @@
       >
         <a-menu
           v-model:selectedKeys="selectedKeys"
-          v-model:openKeys="openKeys"
-          :theme="isDarkMode ? 'dark' : 'light'"
           mode="inline"
         >
-          <div class="logo"></div>
-          <a-sub-menu key="sub1">
+          <a-sub-menu key="sub-content">
             <template #icon><FolderOutlined /></template>
             <template #title>個人部落格</template>
-            <a-menu-item key="Home">
-              <template #icon><HomeOutlined /></template>
-              <router-link to="/">首頁看板</router-link>
-            </a-menu-item>
-            <a-menu-item key="Posts">
-              <template #icon><FileTextOutlined /></template>
-              <router-link to="/posts">文章內容</router-link>
-            </a-menu-item>
-            <a-menu-item key="About">
-              <template #icon><UserOutlined /></template>
-              <router-link to="/about">關於作者</router-link>
+            <a-menu-item key="Home"
+              ><router-link to="/blog/home">首頁看板</router-link></a-menu-item
+            >
+            <a-menu-item key="Posts"
+              ><router-link to="/blog/posts">文章內容</router-link></a-menu-item
+            >
+            <a-menu-item key="About"
+              ><router-link to="/blog/about">關於作者</router-link></a-menu-item
+            >
+          </a-sub-menu>
+
+          <a-sub-menu key="sub-data">
+            <template #icon><PieChartOutlined /></template>
+            <template #title>數據管理</template>
+            <a-menu-item key="Form"
+              ><router-link to="/data/form">人才查詢</router-link></a-menu-item
+            >
+            <a-menu-item key="Statistics"
+              ><router-link to="/data/statistics"
+                >統計分析</router-link
+              ></a-menu-item
+            >
+          </a-sub-menu>
+
+          <a-sub-menu key="sub-knowledge">
+            <template #icon><ReadOutlined /></template>
+            <template #title>知識與日誌</template>
+            <a-menu-item key="ProjectTimeline">
+              <router-link to="/knowledge/timeline">研發里程碑</router-link>
             </a-menu-item>
           </a-sub-menu>
-          <a-sub-menu key="sub2">
-            <template #icon><AppstoreOutlined /></template>
-            <template #title>表單管理</template>
-            <a-menu-item key="Form">
-              <template #icon><FileSearchOutlined /></template>
-              <router-link to="/form">技術人才查詢</router-link>
-            </a-menu-item>
-            <a-menu-item key="Statistics">
-              <template #icon><PieChartOutlined /></template>
-              <router-link to="/staticdashboard">統計數據</router-link>
-            </a-menu-item>
-          </a-sub-menu>
-          <a-menu-item key="SystemSettings">
-            <template #icon><SettingOutlined /></template>
-            <router-link to="/systemsettings">系統設定</router-link>
-          </a-menu-item>
-          <a-menu-item key="ProjectTimeline">
-            <template #icon><HistoryOutlined /></template>
-            <router-link to="/timeline">專案時間軸</router-link>
-          </a-menu-item>
+
           <a-menu-item key="InteractiveLab">
             <template #icon><ExperimentOutlined /></template>
             <router-link to="/interactiveLab">互動實驗室</router-link>
@@ -58,6 +54,10 @@
           <a-menu-item key="dependencyMonitor">
             <template #icon><FileSearchOutlined /></template>
             <router-link to="/dependencyMonitor">依賴監控</router-link>
+          </a-menu-item>
+          <a-menu-item key="SystemSettings">
+            <template #icon><SettingOutlined /></template>
+            <router-link to="/systemsettings">系統設定</router-link>
           </a-menu-item>
         </a-menu>
       </a-layout-sider>
