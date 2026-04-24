@@ -92,10 +92,10 @@
             </a-form-item>
           </a-col>
           <a-col :span="6">
-            <a-form-item label="腳色(Project)">
+            <a-form-item label="角色(Project)">
               <a-select
                 v-model:value="searchForm.projectRole"
-                placeholder="腳色篩選"
+                placeholder="角色篩選"
                 allow-clear
               >
                 <a-select-option
@@ -191,7 +191,7 @@
               <a @click="handleEdit(record)"><edit-outlined />編輯</a>
               <a-divider type="vertical" />
               <a
-                :style="{ color: deleteLinkColor }"
+                style="color: var(--color-error)"
                 @click="confirmDelete(record)"
                 ><delete-outlined />刪除</a
               >
@@ -214,18 +214,20 @@
         ref="formRef"
       >
         <a-row :gutter="16">
-          <a-col :span="8"
-            ><a-form-item
+          <a-col :span="8">
+            <a-form-item
               label="姓名"
               name="name"
-              :rules="[{ required: true }]"
-              ><a-input v-model:value="formState.name" /></a-form-item
-          ></a-col>
+              :rules="[{ required: true, message: '請輸入姓名' }]"
+            >
+              <a-input v-model:value="formState.name" />
+            </a-form-item>
+          </a-col>
           <a-col :span="8">
             <a-form-item
               label="職能"
               name="role"
-              :rules="[{ required: true }]"
+              :rules="[{ required: true, message: '請選擇職能' }]"
             >
               <a-select v-model:value="formState.role">
                 <a-select-option value="前端">前端</a-select-option>
@@ -237,9 +239,9 @@
           </a-col>
           <a-col :span="8">
             <a-form-item
-              label="專案腳色"
+              label="專案角色"
               name="projectRole"
-              :rules="[{ required: true }]"
+              :rules="[{ required: true, message: '請選擇專案角色' }]"
             >
               <a-select v-model:value="formState.projectRole">
                 <a-select-option
@@ -258,7 +260,7 @@
             <a-form-item
               label="單位/處"
               name="division"
-              :rules="[{ required: true }]"
+              :rules="[{ required: true, message: '請選擇單位' }]"
             >
               <a-select
                 v-model:value="formState.division"
@@ -276,7 +278,7 @@
             <a-form-item
               label="部門"
               name="department"
-              :rules="[{ required: true }]"
+              :rules="[{ required: true, message: '請選擇部門' }]"
             >
               <a-select
                 v-model:value="formState.department"
@@ -344,13 +346,14 @@ import { useTheme } from "../composables/useTheme";
 
 const { isDarkMode } = useTheme();
 
-// 欄位定義：拆分職能與腳色
+// 欄位定義：包含科別欄位
 const columns = [
   { title: "姓名", dataIndex: "name", key: "name", fixed: "left", width: 100 },
   { title: "部門", dataIndex: "department", width: 120 },
+  { title: "科別", dataIndex: "section", width: 100 },
   { title: "職能(Job)", dataIndex: "role", width: 100 },
   {
-    title: "專案腳色",
+    title: "專案角色",
     dataIndex: "projectRole",
     key: "projectRole",
     width: 120,
@@ -410,10 +413,13 @@ const searchSecs = computed(() =>
 const modalDepts = computed(() =>
   formState.division ? Object.keys(hierarchy[formState.division]) : [],
 );
-
-const deleteLinkColor = computed(() =>
-  isDarkMode.value ? "var(--color-error)" : "var(--color-error)",
+const modalSecs = computed(() =>
+  formState.division && formState.department
+    ? hierarchy[formState.division][formState.department]
+    : [],
 );
+
+// 修正：直接使用 CSS 變數，不需 computed
 const pageBackground = computed(() =>
   isDarkMode.value ? "var(--bg-app)" : "var(--bg-secondary)",
 );
@@ -426,6 +432,7 @@ const fetchData = () => {
         (!searchForm.name || item.name.includes(searchForm.name)) &&
         (!searchForm.division || item.division === searchForm.division) &&
         (!searchForm.department || item.department === searchForm.department) &&
+        (!searchForm.section || item.section === searchForm.section) &&
         (!searchForm.role || item.role === searchForm.role) &&
         (!searchForm.projectRole ||
           item.projectRole === searchForm.projectRole) &&
@@ -445,6 +452,7 @@ const onSearch = () => {
   pagination.current = 1;
   fetchData();
 };
+
 const onReset = () => {
   Object.assign(searchForm, {
     division: undefined,
@@ -454,7 +462,7 @@ const onReset = () => {
     role: undefined,
     projectRole: undefined,
     level: undefined,
-    tech: [], // 確保重置為空陣列
+    tech: [],
   });
   onSearch();
 };
@@ -486,6 +494,8 @@ const handleEdit = (record) => {
   modalTitle.value = "編輯人才資料";
   Object.assign(formState, JSON.parse(JSON.stringify(record)));
   modalVisible.value = true;
+  // 修正：編輯時也要清除上次的驗證狀態
+  nextTick(() => formRef.value?.clearValidate());
 };
 
 const handleModalOk = () => {
@@ -508,6 +518,29 @@ const handleModalOk = () => {
   });
 };
 
+// 修正：補齊刪除功能
+const confirmDelete = (record) => {
+  Modal.confirm({
+    title: "確認刪除",
+    content: `確定要刪除「${record.name}」的資料嗎？此操作無法復原。`,
+    okText: "確認刪除",
+    okType: "danger",
+    cancelText: "取消",
+    onOk() {
+      allRawData.value = allRawData.value.filter(
+        (item) => item.id !== record.id,
+      );
+      // 若刪除後當前頁無資料，退回上一頁
+      const maxPage = Math.ceil(allRawData.value.length / pagination.pageSize);
+      if (pagination.current > maxPage && maxPage > 0) {
+        pagination.current = maxPage;
+      }
+      fetchData();
+      message.success("刪除成功");
+    },
+  });
+};
+
 const onSearchDivChange = () => {
   searchForm.department = undefined;
   searchForm.section = undefined;
@@ -517,6 +550,10 @@ const onSearchDeptChange = () => {
 };
 const onModalDivChange = () => {
   formState.department = undefined;
+  formState.section = undefined;
+};
+// 修正：補齊 Modal 部門變更時清空科別
+const onModalDeptChange = () => {
   formState.section = undefined;
 };
 

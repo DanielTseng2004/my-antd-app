@@ -9,6 +9,7 @@
         type="card"
         @change="clearDetail"
       >
+        <!-- ==================== Tab 1: 專案角色人力分布 ==================== -->
         <a-tab-pane
           key="role"
           tab="專案角色人力分布"
@@ -21,6 +22,8 @@
             size="middle"
             class="main-table"
             row-key="roleValue"
+            :scroll="{ x: 'max-content' }"
+            v-model:expandedRowKeys="roleExpandedKeys"
           >
             <template #bodyCell="{ column, record }">
               <template v-if="column.key === 'roleLabel'">
@@ -35,7 +38,10 @@
                     'clickable-count',
                     { 'has-value': record[column.key] > 0 },
                   ]"
-                  @click="handleMainClick('role', record.roleValue, column.key)"
+                  @click="
+                    record[column.key] > 0 &&
+                    handleMainClick('role', record.roleValue, column.key)
+                  "
                 >
                   {{ record[column.key] > 0 ? record[column.key] : "-" }}
                 </div>
@@ -53,13 +59,14 @@
                   :pagination="false"
                   size="small"
                   bordered
+                  :scroll="{ x: 'max-content' }"
                 >
                   <template #bodyCell="{ column, record: subRecord }">
-                    <template v-if="column.key === 'level'"
-                      ><a-tag :color="getLevelColor(subRecord.level)">{{
-                        subRecord.level
-                      }}</a-tag></template
-                    >
+                    <template v-if="column.key === 'level'">
+                      <a-tag :color="getLevelColor(subRecord.level)">
+                        {{ subRecord.level }}
+                      </a-tag>
+                    </template>
                     <template v-else-if="allDepartments.includes(column.key)">
                       <div
                         :class="[
@@ -67,6 +74,7 @@
                           { active: subRecord[column.key] > 0 },
                         ]"
                         @click="
+                          subRecord[column.key] > 0 &&
                           handleSubClick(
                             'role',
                             roleRecord.roleValue,
@@ -90,6 +98,7 @@
           </a-table>
         </a-tab-pane>
 
+        <!-- ==================== Tab 2: 技術人才庫 ==================== -->
         <a-tab-pane
           key="tech"
           tab="技術人才庫"
@@ -102,23 +111,29 @@
             size="middle"
             class="main-table"
             row-key="techValue"
+            :scroll="{ x: 'max-content' }"
+            v-model:expandedRowKeys="techExpandedKeys"
           >
             <template #bodyCell="{ column, record }">
-              <template v-if="column.key === 'techLabel'"
-                ><span class="tech-text">{{ record.techLabel }}</span></template
-              >
+              <template v-if="column.key === 'techLabel'">
+                <span class="tech-text">{{ record.techLabel }}</span>
+              </template>
               <template v-else-if="allDepartments.includes(column.key)">
                 <div
                   :class="[
                     'clickable-count',
                     { 'has-value': record[column.key] > 0 },
                   ]"
-                  @click="handleMainClick('tech', record.techValue, column.key)"
+                  @click="
+                    record[column.key] > 0 &&
+                    handleMainClick('tech', record.techValue, column.key)
+                  "
                 >
                   {{ record[column.key] > 0 ? record[column.key] : "-" }}
                 </div>
               </template>
             </template>
+
             <template #expandedRowRender="{ record: techRecord }">
               <div class="expand-box job-bg">
                 <div class="expand-title">
@@ -130,13 +145,15 @@
                   :pagination="false"
                   size="small"
                   bordered
+                  :scroll="{ x: 'max-content' }"
                 >
                   <template #bodyCell="{ column, record: subRecord }">
-                    <template v-if="column.key === 'job'"
-                      ><a-badge
+                    <template v-if="column.key === 'job'">
+                      <a-badge
                         status="processing"
                         :text="subRecord.job"
-                    /></template>
+                      />
+                    </template>
                     <template v-else-if="allDepartments.includes(column.key)">
                       <div
                         :class="[
@@ -144,6 +161,7 @@
                           { active: subRecord[column.key] > 0 },
                         ]"
                         @click="
+                          subRecord[column.key] > 0 &&
                           handleSubClick(
                             'tech',
                             techRecord.techValue,
@@ -169,8 +187,9 @@
       </a-tabs>
     </a-card>
 
+    <!-- 修正：v-if 改為 > 0，有篩選結果才顯示 -->
     <a-card
-      v-if="detailList.length >= 0"
+      v-if="isDetailVisible"
       title="篩選人才清單"
       style="margin-top: 24px"
       class="detail-card"
@@ -184,7 +203,10 @@
           >重置</a-button
         >
       </template>
+
+      <!-- 有資料時顯示表格 -->
       <a-table
+        v-if="detailList.length > 0"
         :columns="detailColumns"
         :data-source="detailList"
         row-key="id"
@@ -203,6 +225,13 @@
           </template>
         </template>
       </a-table>
+
+      <!-- 無資料時顯示空狀態 -->
+      <a-empty
+        v-else
+        description="此條件下無符合人才"
+        style="padding: 24px 0"
+      />
     </a-card>
   </div>
 </template>
@@ -221,8 +250,16 @@ const dashboardTab = ref("role");
 const detailList = ref([]);
 const activeFilterText = ref("");
 
+// 修正：用獨立 flag 控制明細卡片顯示，避免空陣列時永遠顯示
+const isDetailVisible = ref(false);
+
+// 保留各 Tab 的展開狀態，切換 Tab 後再切回不會重置
+const roleExpandedKeys = ref([]);
+const techExpandedKeys = ref([]);
+
 const levels = ["Junior", "Senior", "Expert"];
 const jobs = ["前端", "後端", "測試", "維運"];
+
 const allDepartments = computed(() => {
   const depts = [];
   Object.values(hierarchy).forEach((div) => depts.push(...Object.keys(div)));
@@ -238,7 +275,7 @@ const createCols = (title, key, width = 160) => {
   return c;
 };
 
-// 數據定義
+// 資料定義
 const roleColumns = computed(() => createCols("專案角色", "roleLabel"));
 const roleData = computed(() =>
   projectRoles.map((r) => {
@@ -268,14 +305,33 @@ const techData = computed(() =>
 );
 
 const levelSubColumns = computed(() => createCols("熟練等級", "level", 120));
+
+// 修正：使用預先建立的 Map 索引加速子表計算，避免每次展開都重新全量掃描
+const roleLevelIndex = computed(() => {
+  const map = new Map();
+  allRawData.forEach((i) => {
+    const key = `${i.projectRole}__${i.level}__${i.department}`;
+    map.set(key, (map.get(key) || 0) + 1);
+  });
+  return map;
+});
+
+const techJobIndex = computed(() => {
+  const map = new Map();
+  allRawData.forEach((i) => {
+    i.tech.forEach((tv) => {
+      const key = `${tv}__${i.role}__${i.department}`;
+      map.set(key, (map.get(key) || 0) + 1);
+    });
+  });
+  return map;
+});
+
 const getRoleLevelData = (rv) =>
   levels.map((lv) => {
     const row = { level: lv };
     allDepartments.value.forEach(
-      (d) =>
-        (row[d] = allRawData.filter(
-          (i) => i.department === d && i.projectRole === rv && i.level === lv,
-        ).length),
+      (d) => (row[d] = roleLevelIndex.value.get(`${rv}__${lv}__${d}`) || 0),
     );
     return row;
   });
@@ -285,10 +341,7 @@ const getTechJobData = (tv) =>
   jobs.map((j) => {
     const row = { job: j };
     allDepartments.value.forEach(
-      (d) =>
-        (row[d] = allRawData.filter(
-          (i) => i.department === d && i.tech.includes(tv) && i.role === j,
-        ).length),
+      (d) => (row[d] = techJobIndex.value.get(`${tv}__${j}__${d}`) || 0),
     );
     return row;
   });
@@ -302,9 +355,10 @@ const handleMainClick = (type, val, dept) => {
       (isRole ? i.projectRole === val : i.tech.includes(val)),
   );
   const label = isRole
-    ? projectRoles.find((r) => r.value === val).label
-    : techOptions.find((t) => t.value === val).label;
+    ? projectRoles.find((r) => r.value === val)?.label
+    : techOptions.find((t) => t.value === val)?.label;
   activeFilterText.value = `${dept} > ${label}`;
+  isDetailVisible.value = true;
 };
 
 const handleSubClick = (type, mVal, dept, subF, subV) => {
@@ -316,15 +370,18 @@ const handleSubClick = (type, mVal, dept, subF, subV) => {
       i[subF] === subV,
   );
   const label = isRole
-    ? projectRoles.find((r) => r.value === mVal).label
-    : techOptions.find((t) => t.value === mVal).label;
+    ? projectRoles.find((r) => r.value === mVal)?.label
+    : techOptions.find((t) => t.value === mVal)?.label;
   activeFilterText.value = `${dept} > ${label} > ${subV}`;
+  isDetailVisible.value = true;
 };
 
 const clearDetail = () => {
   detailList.value = [];
   activeFilterText.value = "";
+  isDetailVisible.value = false;
 };
+
 const getLevelColor = (lv) =>
   ({ Expert: "purple", Senior: "orange", Junior: "blue" })[lv];
 

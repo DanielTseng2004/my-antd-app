@@ -174,24 +174,29 @@ onMounted(() => {
   padding-bottom: 10px;
   margin-top: 20px;
 }
+
 .markdown-content :deep(h2) {
   margin-top: 24px;
   border-left: 4px solid #1890ff;
   padding-left: 12px;
 }
+
 .markdown-content :deep(code) {
   background: #fff5f5;
   color: #ff4d4f;
   padding: 2px 4px;
   border-radius: 4px;
 }
+
 .markdown-content :deep(ul) {
   padding-left: 20px;
 }
+
 .markdown-content :deep(li) {
   margin-bottom: 8px;
   line-height: 1.6;
 }
+
 .markdown-content :deep(strong) {
   color: #000;
   font-weight: 600;

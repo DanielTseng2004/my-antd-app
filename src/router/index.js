@@ -1,7 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
-  // --- 1. 個人部落格維度 (加上 /blog 前綴) ---
+  // --- 1. 全站入口 (唯一網站首頁) ---
+  {
+    path: "/",
+    name: "SiteHome",
+    component: () => import("../views/Home.vue"),
+  },
+
+  // --- 2. 個人部落格維度 ---
   {
     path: "/blog",
     name: "BlogBase",
@@ -9,32 +16,33 @@ const routes = [
     children: [
       {
         path: "home",
-        name: "Home",
+        name: "BlogHome",
         component: () => import("../views/BlogHome.vue"),
       },
       {
         path: "posts",
-        name: "Posts",
+        name: "BlogPosts",
         component: () => import("../views/BlogPosts.vue"),
       },
       {
         path: "posts/:id",
-        name: "PostDetail",
+        name: "BlogPostDetail",
         component: () => import("../views/BlogPostDetail.vue"),
         props: true,
       },
       {
         path: "about",
-        name: "About",
+        name: "BlogAbout",
         component: () => import("../views/BlogAbout.vue"),
       },
     ],
   },
-  // --- 2. 數據管理維度 ---
+
+  // --- 3. 數據管理維度 ---
   {
     path: "/data",
     name: "DataManagement",
-    redirect: "/data",
+    redirect: "/data/statistics", // 修正原先 redirect: "/data" 可能導致的死循環
     children: [
       {
         path: "form",
@@ -48,16 +56,8 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/form",
-    redirect: "/data/form",
-  },
-  {
-    path: "/staticdashboard",
-    redirect: "/data/statistics",
-  },
 
-  // --- 3. 知識管理維度 ---
+  // --- 4. 知識管理維度 ---
   {
     path: "/knowledge",
     name: "KnowledgeBase",
@@ -75,12 +75,8 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/knowledge/wiki",
-    redirect: "/knowledge/timeline",
-  },
 
-  // --- 4. 系統與實驗室 ---
+  // --- 5. 系統功能與實驗室 ---
   {
     path: "/interactiveLab",
     name: "InteractiveLab",

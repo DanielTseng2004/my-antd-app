@@ -13,21 +13,25 @@
           mode="inline"
         >
           <a-sub-menu key="sub-content">
-            <template #icon><FolderOutlined /></template>
+            <template #icon>
+              <FolderOutlined />
+            </template>
             <template #title>個人部落格</template>
-            <a-menu-item key="Home"
-              ><router-link to="/blog/home">首頁看板</router-link></a-menu-item
-            >
-            <a-menu-item key="Posts"
+            <a-menu-item key="BlogHome">
+              <router-link to="/blog/home">部落格看版</router-link>
+            </a-menu-item>
+            <a-menu-item key="BlogPosts"
               ><router-link to="/blog/posts">文章內容</router-link></a-menu-item
             >
-            <a-menu-item key="About"
+            <a-menu-item key="BlogAbout"
               ><router-link to="/blog/about">關於作者</router-link></a-menu-item
             >
           </a-sub-menu>
 
           <a-sub-menu key="sub-data">
-            <template #icon><PieChartOutlined /></template>
+            <template #icon>
+              <PieChartOutlined />
+            </template>
             <template #title>數據管理</template>
             <a-menu-item key="Form"
               ><router-link to="/data/form">人才查詢</router-link></a-menu-item
@@ -40,7 +44,9 @@
           </a-sub-menu>
 
           <a-sub-menu key="sub-knowledge">
-            <template #icon><ReadOutlined /></template>
+            <template #icon>
+              <ReadOutlined />
+            </template>
             <template #title>知識與日誌</template>
             <a-menu-item key="ProjectTimeline">
               <router-link to="/knowledge/timeline">研發里程碑</router-link>
@@ -51,15 +57,21 @@
           </a-sub-menu>
 
           <a-menu-item key="InteractiveLab">
-            <template #icon><ExperimentOutlined /></template>
+            <template #icon>
+              <ExperimentOutlined />
+            </template>
             <router-link to="/interactiveLab">互動實驗室</router-link>
           </a-menu-item>
           <a-menu-item key="dependencyMonitor">
-            <template #icon><FileSearchOutlined /></template>
+            <template #icon>
+              <FileSearchOutlined />
+            </template>
             <router-link to="/dependencyMonitor">依賴監控</router-link>
           </a-menu-item>
           <a-menu-item key="SystemSettings">
-            <template #icon><SettingOutlined /></template>
+            <template #icon>
+              <SettingOutlined />
+            </template>
             <router-link to="/systemsettings">系統設定</router-link>
           </a-menu-item>
         </a-menu>
@@ -75,10 +87,14 @@
               <MenuUnfoldOutlined v-if="collapsed" />
               <MenuFoldOutlined v-else />
             </div>
-            <div class="logo-area">
-              <BookOutlined style="font-size: 1.5rem" />
-              <span class="logo-text">管理系統</span>
-            </div>
+            <router-link to="/">
+              <div class="logo-area">
+                <span class="logo-text">
+                  <BookOutlined style="font-size: 1.5rem" />
+                  管理系統
+                </span>
+              </div>
+            </router-link>
           </div>
 
           <div class="user-info">
@@ -110,7 +126,9 @@
                       marginRight: '8px',
                     }"
                   >
-                    <template #icon><UserOutlined /></template>
+                    <template #icon>
+                      <UserOutlined />
+                    </template>
                   </a-avatar>
                   <span class="username">Manus Admin</span>
                   <DownOutlined style="margin-left: 8px; font-size: 10px" />
@@ -246,14 +264,17 @@ watchEffect(() => {
   box-shadow: var(--header-shadow);
   color: var(--header-text);
 }
+
 .app-content {
   margin: 16px 24px 0 24px;
   background: transparent;
 }
 
 .breadcrumb-container {
-  margin: 12px 0 16px 8px; /* 增加左邊距 8px */
+  margin: 12px 0 16px 8px;
+  /* 增加左邊距 8px */
 }
+
 .header-left,
 .user-info {
   display: flex;
@@ -283,7 +304,8 @@ watchEffect(() => {
 
 /* 選單樣式統一修正 */
 .user-dropdown-menu :deep(.ant-dropdown-menu-item) {
-  padding: 0; /* 移除內部預設間距以利 router-link 撐滿 */
+  padding: 0;
+  /* 移除內部預設間距以利 router-link 撐滿 */
 }
 
 .menu-link-item,
@@ -295,29 +317,38 @@ watchEffect(() => {
   text-decoration: none !important;
   width: 100%;
 }
+
 .menu-item-content {
   display: flex !important;
   align-items: center;
   width: 100%;
-  padding: 5px 12px; /* 這裡的 padding 控制選單間距 */
-  color: inherit !important; /* 強制繼承文字顏色，避免連結變藍色 */
-  text-decoration: none !important; /* 移除下劃線 */
+  padding: 5px 12px;
+  /* 這裡的 padding 控制選單間距 */
+  color: inherit !important;
+  /* 強制繼承文字顏色，避免連結變藍色 */
+  text-decoration: none !important;
+  /* 移除下劃線 */
   transition: all 0.3s;
 }
+
 .user-dropdown-menu :deep(.ant-dropdown-menu-item) {
   padding: 0 !important;
 }
+
 .menu-item-content :deep(.anticon) {
   margin-right: 10px;
   font-size: 14px;
 }
+
 .user-dropdown-link {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
+
 .menu-item-content:hover {
-  background-color: var(--ant-primary-1); /* 或者使用透明黑 rgba(0,0,0,0.04) */
+  background-color: var(--ant-primary-1);
+  /* 或者使用透明黑 rgba(0,0,0,0.04) */
 }
 
 /* 側邊欄樣式 */
@@ -328,6 +359,7 @@ watchEffect(() => {
 }
 
 .logo-text {
+  color: aliceblue;
   margin-left: 12px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -337,6 +369,7 @@ watchEffect(() => {
   font-size: 18px;
   cursor: pointer;
 }
+
 /* App.vue */
 /* 使用全域變數替代本地定義 */
 
