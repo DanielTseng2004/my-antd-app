@@ -45,6 +45,9 @@
             <a-menu-item key="ProjectTimeline">
               <router-link to="/knowledge/timeline">研發里程碑</router-link>
             </a-menu-item>
+            <a-menu-item key="KnowledgeWiki">
+              <router-link to="/knowledge/wiki">知識庫</router-link>
+            </a-menu-item>
           </a-sub-menu>
 
           <a-menu-item key="InteractiveLab">
@@ -67,7 +70,7 @@
           <div class="header-left">
             <div
               class="trigger-btn"
-              @click="() => (collapsed = !collapsed)"
+              @click="collapsed = !collapsed"
             >
               <MenuUnfoldOutlined v-if="collapsed" />
               <MenuFoldOutlined v-else />
@@ -184,6 +187,7 @@ import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   FolderOutlined,
+  ReadOutlined,
   AppstoreOutlined,
   BellOutlined,
   SettingOutlined,

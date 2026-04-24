@@ -54,7 +54,7 @@
             <p>{{ post.summary }}</p>
             <a-button
               type="primary"
-              @click="$router.push('/posts/' + post.id)"
+              @click="$router.push('/blog/posts/' + post.id)"
               >閱讀更多</a-button
             >
           </div>
@@ -161,7 +161,7 @@
       :data-source="latestPosts"
     >
       <template #renderItem="{ item }">
-        <a-list-item key="item.title">
+        <a-list-item :key="item.id">
           <template #actions>
             <span>
               <calendar-outlined

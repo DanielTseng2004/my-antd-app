@@ -10,44 +10,31 @@ const routes = [
       {
         path: "home",
         name: "Home",
-        component: () => import("../views/Home.vue"),
+        component: () => import("../views/BlogHome.vue"),
       },
       {
         path: "posts",
         name: "Posts",
-        component: () => import("../views/Posts.vue"),
+        component: () => import("../views/BlogPosts.vue"),
       },
       {
         path: "posts/:id",
         name: "PostDetail",
-        component: () => import("../views/PostDetail.vue"),
+        component: () => import("../views/BlogPostDetail.vue"),
         props: true,
       },
       {
         path: "about",
         name: "About",
-        component: () => import("../views/About.vue"),
+        component: () => import("../views/BlogAbout.vue"),
       },
     ],
   },
-  {
-    path: "/",
-    redirect: "/blog/home",
-  },
-  {
-    path: "/posts",
-    redirect: "/blog/posts",
-  },
-  {
-    path: "/about",
-    redirect: "/blog/about",
-  },
-
   // --- 2. 數據管理維度 ---
   {
     path: "/data",
     name: "DataManagement",
-    redirect: "/data/form",
+    redirect: "/data",
     children: [
       {
         path: "form",
@@ -80,6 +67,11 @@ const routes = [
         path: "timeline",
         name: "ProjectTimeline",
         component: () => import("../views/ProjectTimeline.vue"),
+      },
+      {
+        path: "wiki",
+        name: "KnowledgeWiki",
+        component: () => import("../views/knowledge.vue"),
       },
     ],
   },

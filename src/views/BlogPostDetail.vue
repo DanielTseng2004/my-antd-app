@@ -3,16 +3,13 @@
     class="post-detail"
     v-if="post"
   >
-    <!-- 麵包屑導航 -->
     <a-breadcrumb style="margin-bottom: 16px">
-      <a-breadcrumb-item
-        ><router-link to="/"
-          ><home-outlined /> 首頁</router-link
-        ></a-breadcrumb-item
-      >
-      <a-breadcrumb-item
-        ><router-link to="/blog/posts">文章列表</router-link></a-breadcrumb-item
-      >
+      <a-breadcrumb-item>
+        <router-link to="/"><home-outlined /> 首頁</router-link>
+      </a-breadcrumb-item>
+      <a-breadcrumb-item>
+        <router-link to="/blog/posts">文章列表</router-link>
+      </a-breadcrumb-item>
       <a-breadcrumb-item>{{ post.title }}</a-breadcrumb-item>
     </a-breadcrumb>
 
@@ -92,7 +89,6 @@
       </a-descriptions>
     </a-page-header>
 
-    <!-- 文章封面圖 -->
     <div class="post-cover-container">
       <img
         :src="post.cover"
@@ -268,9 +264,10 @@ import {
   MessageOutlined,
 } from "@ant-design/icons-vue";
 
+// 1. 合併 Script：Vue 不允許單個 SFC 中有多個 <script setup>
 const { isDarkMode } = useTheme();
-
 const route = useRoute();
+
 const drawerOpen = ref(false);
 const activeTab = ref("content");
 const feedbackForm = reactive({
@@ -279,12 +276,16 @@ const feedbackForm = reactive({
   comment: "",
 });
 
-const heartColor = computed(() =>
-  isDarkMode.value ? "var(--color-error)" : "var(--color-error)",
-);
+// 2. 統一變數管理：將樣式變數與主題邏輯結合
+const heartColor = computed(() => "var(--color-error)");
 const textColor = computed(() => (isDarkMode.value ? "var(--text)" : "#666"));
 const titleColor = computed(() =>
   isDarkMode.value ? "var(--text-h)" : "#333",
+);
+
+// 3. 解決 CSS 換行報錯問題：在 JS 中預先計算背景色
+const summaryBg = computed(() =>
+  isDarkMode.value ? "var(--surface-muted)" : "var(--bg-secondary)",
 );
 
 const post = computed(() => {
@@ -305,20 +306,14 @@ const copyLink = () => {
   const url = window.location.href;
   navigator.clipboard
     .writeText(url)
-    .then(() => {
-      message.success("連結已複製到剪貼板！");
-    })
-    .catch(() => {
-      message.error("複製失敗，請重試");
-    });
+    .then(() => message.success("連結已複製到剪貼板！"))
+    .catch(() => message.error("複製失敗，請重試"));
 };
 
 const submitFeedback = () => {
   drawerOpen.value = false;
   message.success(`感謝 ${feedbackForm.name} 的回饋`);
-  feedbackForm.name = "";
-  feedbackForm.rating = "";
-  feedbackForm.comment = "";
+  Object.assign(feedbackForm, { name: "", rating: "", comment: "" });
 };
 </script>
 
@@ -350,9 +345,8 @@ const submitFeedback = () => {
 }
 
 .post-summary-box {
-  background: v-bind(
-    isDarkMode ? "var(--surface-muted)": "var(--bg-secondary)"
-  );
+  /* 使用 JS 計算好的 summaryBg，確保穩定性 */
+  background: v-bind(summaryBg);
   padding: 16px;
   border-left: 4px solid var(--icon-info-color);
   border-radius: 4px;

@@ -116,7 +116,7 @@
       :data-source="filteredPosts"
     >
       <template #renderItem="{ item }">
-        <a-list-item key="item.title">
+        <a-list-item :key="item.id">
           <template #actions>
             <span>
               <calendar-outlined
@@ -149,7 +149,7 @@
             <template #title>
               <div style="margin-bottom: 8px">
                 <router-link
-                  :to="'/posts/' + item.id"
+                  :to="'/blog/posts/' + item.id"
                   style="font-size: 1.3rem; font-weight: bold"
                 >
                   {{ item.title }}

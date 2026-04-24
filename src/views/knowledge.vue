@@ -95,12 +95,44 @@ const selectedKeys = ref(["home.md"]);
 
 // 定義文件列表 (對應 public/docs/ 下的檔名)
 const docList = [
-  { name: "首頁功能說明", file: "home.md", icon: "HomeOutlined" },
-  { name: "文章管理系統", file: "posts.md", icon: "FileTextOutlined" },
-  { name: "關於與人才庫", file: "about.md", icon: "UserOutlined" },
-  { name: "數據看板分析", file: "statistics.md", icon: "BarChartOutlined" },
-  { name: "互動實驗室", file: "lab.md", icon: "ExperimentOutlined" },
-  { name: "系統偏好設置", file: "settings.md", icon: "SettingOutlined" },
+  { name: "1. 關於我頁面", file: "BlogAbout.md", icon: "UserOutlined" },
+  { name: "2. 部落格首頁", file: "BlogHome.md", icon: "HomeOutlined" },
+  {
+    name: "3. 文章列表頁",
+    file: "BlogPosts.md",
+    icon: "UnorderedListOutlined",
+  },
+  {
+    name: "4. 文章詳情頁",
+    file: "BlogPostDetail.md",
+    icon: "FileTextOutlined",
+  },
+  {
+    name: "5. 套件監控頁",
+    file: "DependencyMonitor.md",
+    icon: "DashboardOutlined",
+  },
+  { name: "6. 人才管理頁", file: "FormView.md", icon: "TeamOutlined" },
+  {
+    name: "7. 互動實驗室",
+    file: "InteractiveLab.md",
+    icon: "ExperimentOutlined",
+  },
+  {
+    name: "8. 專案里程碑",
+    file: "ProjectTimeline.md",
+    icon: "HistoryOutlined",
+  },
+  {
+    name: "9. 數據看板",
+    file: "StatisticsDashboard.md",
+    icon: "LineChartOutlined",
+  },
+  {
+    name: "10. 系統設置頁",
+    file: "SystemSettings.md",
+    icon: "SettingOutlined",
+  },
 ];
 
 const currentDocName = computed(() => {
