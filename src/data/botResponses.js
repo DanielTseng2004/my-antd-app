@@ -8,7 +8,7 @@ export const MOCK_DB = {
   技術文章: {
     ans: "這裡記錄了我對 Vue 3、Vite 以及前端架構的實戰心得，希望能對您有所幫助！",
     options: ["數據看板", "返回首頁"],
-    path: "/blog/posts",
+    path: "/knowledge/wiki",
   },
   數據看板: {
     ans: "正在載入即時數據圖表。這裡使用了 ECharts 進行視覺化展示，請稍候...",
