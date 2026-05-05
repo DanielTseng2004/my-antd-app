@@ -233,6 +233,72 @@
         style="padding: 24px 0"
       />
     </a-card>
+    <a-card
+      title="人力資源編輯表 (動態)"
+      :bordered="false"
+    >
+      <a-space style="margin-bottom: 16px">
+        <a-button
+          type="primary"
+          @click="handleAdd"
+        >
+          <template #icon><plus-outlined /></template>
+          新增成員
+        </a-button>
+      </a-space>
+
+      <a-table
+        :columns="columns"
+        :data-source="dataSource"
+        :pagination="false"
+        row-key="id"
+        bordered
+      >
+        <template #bodyCell="{ column, record, index }">
+          <template v-if="column.key === 'name'">
+            <a-input
+              v-model:value="record.name"
+              placeholder="請輸入姓名"
+            />
+          </template>
+
+          <template v-else-if="column.key === 'role'">
+            <a-select
+              v-model:value="record.role"
+              placeholder="選擇角色"
+              style="width: 100%"
+              :getPopupContainer="(triggerNode) => triggerNode.parentNode"
+            >
+              <a-select-option value="前端">前端</a-select-option>
+              <a-select-option value="後端">後端</a-select-option>
+              <a-select-option value="設計">設計</a-select-option>
+            </a-select>
+          </template>
+
+          <template v-else-if="column.key === 'status'">
+            <a-select
+              v-model:value="record.status"
+              placeholder="選擇狀態"
+              style="width: 100%"
+              :getPopupContainer="(triggerNode) => triggerNode.parentNode"
+            >
+              <a-select-option value="online">在線</a-select-option>
+              <a-select-option value="busy">忙碌</a-select-option>
+              <a-select-option value="offline">休假</a-select-option>
+            </a-select>
+          </template>
+
+          <template v-else-if="column.key === 'action'">
+            <a-typography-link
+              @click="handleDelete(index)"
+              style="color: #ff4d4f"
+            >
+              刪除
+            </a-typography-link>
+          </template>
+        </template>
+      </a-table>
+    </a-card>
   </div>
 </template>
 
@@ -244,6 +310,34 @@ import {
   projectRoles,
   techOptions,
 } from "../data/mockData";
+import { PlusOutlined } from "@ant-design/icons-vue"; // 正確引入方式
+
+// 初始化三行數據
+const dataSource = ref([
+  { id: 1, name: "張小明", role: "前端", status: "online" },
+  { id: 2, name: "李大華", role: "後端", status: "busy" },
+  { id: 3, name: "王小美", role: "設計", status: "offline" },
+]);
+
+const columns = [
+  { title: "姓名 (輸入)", dataIndex: "name", key: "name", width: "25%" },
+  { title: "崗位 (選單1)", dataIndex: "role", key: "role", width: "25%" },
+  { title: "狀態 (選單2)", dataIndex: "status", key: "status", width: "30%" },
+  { title: "操作", key: "action", width: "100px" },
+];
+
+const handleAdd = () => {
+  dataSource.value.push({
+    id: Date.now(), // 確保 key 唯一
+    name: "",
+    role: undefined,
+    status: "online",
+  });
+};
+
+const handleDelete = (index) => {
+  dataSource.value.splice(index, 1);
+};
 
 const allRawData = generateMockList(100);
 const dashboardTab = ref("role");
